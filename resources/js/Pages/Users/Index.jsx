@@ -1,8 +1,19 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-
 import { Head, Link } from "@inertiajs/react";
 
 export default function Dashboard({ auth, users }) {
+    const customizePaginationLabels = (link) => {
+        let label = link.label.replace("&laquo;", "«").replace("&raquo;", "»");
+
+        if (label.includes("Previous")) {
+            return "Précédent";
+        } else if (label.includes("Next")) {
+            return "Suivant";
+        }
+
+        return label;
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -13,32 +24,72 @@ export default function Dashboard({ auth, users }) {
             }
         >
             <Head title="Utilisateurs" />
+            <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-white py-5 text-xl font-semibold ">
+                        Liste des utilisateurs
+                    </h1>
+                    <button className="p-2 border rounded block bg-green-400">
+                        <Link route={route("users.create")}>
+                            Ajouter un utilisateur
+                        </Link>
+                    </button>
+                </div>
 
-            <h1>Liste des utilisateurs</h1>
-            <ul>
-                {users.data.map((user) => (
-                    <li key={user.id}>
-                        {user.name} - {user.email}
-                    </li>
-                ))}
-            </ul>
-            <nav>
                 <ul>
-                    <li>
-                        {users.links.map((link, index) => (
-                            <Link
-                                className="text-white px-2"
-                                key={index}
-                                href={link.url}
-                                disabled={!link.url}
-                                preserveScroll
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
-                    </li>
+                    {users.data.map((user) => (
+                        <li
+                            className="text-white px-5 py-2 flex justify-between block w-full border-b border-gray-900"
+                            key={user.id}
+                        >
+                            {user.name} - {user.email}{" "}
+                            <button className="px-3 py-1 border rounded">
+                                Modifier
+                            </button>
+                        </li>
+                    ))}
                 </ul>
-            </nav>
+                <nav aria-label="Pagination" className="py-5">
+                    <ul className="flex list-style-none justify-center space-x-1">
+                        {users.links.map((link, index) => {
+                            const isActive = link.active;
+
+                            const isPrevNext =
+                                link.label.includes("Previous") ||
+                                link.label.includes("Next");
+
+                            const activeClasses = isActive
+                                ? "bg-grey-500 text-white"
+                                : "bg-grey-300 text-white-700";
+
+                            const prevNextClasses = isPrevNext
+                                ? "bg-grey-500 text-white"
+                                : "";
+
+                            const inactiveClasses =
+                                !isActive && !isPrevNext
+                                    ? "bg-gray-200 text-gray-800"
+                                    : "";
+
+                            const linkClasses = `px-3 py-1 border rounded ${activeClasses} ${prevNextClasses} ${inactiveClasses}`;
+
+                            return (
+                                <li key={index} className="py-2 px-2">
+                                    <Link
+                                        className={linkClasses}
+                                        href={link.url ? link.url : "#"}
+                                        preserveScroll
+                                        disabled={!link.url}
+                                    >
+                                        {/* Ici nous utilisons directement le texte modifié sans dangerouslySetInnerHTML */}
+                                        {customizePaginationLabels(link)}
+                                    </Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
+            </section>
         </AuthenticatedLayout>
     );
 }

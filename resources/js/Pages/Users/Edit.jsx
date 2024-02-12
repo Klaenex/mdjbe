@@ -34,7 +34,7 @@ export default function EditUser({ auth, editUser }) {
                 </h2>
             }
         >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} method="put">
                 <div>
                     <label htmlFor="name">Nom</label>
                     <TextInput

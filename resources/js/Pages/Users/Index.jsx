@@ -29,11 +29,13 @@ export default function Dashboard({ auth, users }) {
                     <h1 className="text-white py-5 text-xl font-semibold ">
                         Liste des utilisateurs
                     </h1>
-                    <button className="p-2 border rounded block bg-green-400">
-                        <Link route={route("users.create")}>
-                            Ajouter un utilisateur
-                        </Link>
-                    </button>
+
+                    <Link
+                        className="p-2 border rounded block bg-green-400"
+                        href={route("users.create")}
+                    >
+                        Ajouter un utilisateur
+                    </Link>
                 </div>
 
                 <ul>
@@ -81,7 +83,6 @@ export default function Dashboard({ auth, users }) {
                                         preserveScroll
                                         disabled={!link.url}
                                     >
-                                        {/* Ici nous utilisons directement le texte modifié sans dangerouslySetInnerHTML */}
                                         {customizePaginationLabels(link)}
                                     </Link>
                                 </li>

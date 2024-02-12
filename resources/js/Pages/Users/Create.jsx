@@ -1,18 +1,16 @@
-// js/Pages/Users/Create.jsx
-
 import React, { useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Inertia } from "@inertiajs/inertia";
 
-export default function CreateUser(props) {
+export default function CreateUser(user, auth) {
+    console.log(user);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         is_admin: false,
     });
-
+    console.log(user);
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -28,8 +26,7 @@ export default function CreateUser(props) {
 
     return (
         <AuthenticatedLayout
-            auth={props.auth}
-            errors={props.errors}
+            user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
                     Créer un nouvel utilisateur

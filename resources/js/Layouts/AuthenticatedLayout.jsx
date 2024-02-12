@@ -8,7 +8,11 @@ import { Link } from "@inertiajs/react";
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
-
+    console.log(user.name);
+    const isAdmin = user && user.is_admin === 1;
+    if (!user) {
+        return <div>Chargement...</div>;
+    }
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -28,7 +32,7 @@ export default function Authenticated({ user, header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
-                                {user.is_admin && (
+                                {isAdmin && (
                                     <NavLink
                                         href={route("users.index")}
                                         active={route().current("users.index")}

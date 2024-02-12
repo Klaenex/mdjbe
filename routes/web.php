@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store']);
 });
 

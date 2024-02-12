@@ -13,9 +13,22 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(10);
-        return Inertia::render('Users/Index', ['users' => $users]);
+        return Inertia::render('Users/Index', [
+            'users' => $users,
+            'user' => auth()->user()
+        ]);
     }
 
+
+
+
+    public function create()
+    {
+
+        return Inertia::render('Users/Create', [
+            'user' => auth()->user(),
+        ]);
+    }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

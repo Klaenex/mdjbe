@@ -4,11 +4,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function CreateUser({ auth }) {
+export default function EditUser({ auth, editUser }) {
+    console.log(editUser);
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        is_admin: 0,
+        name: editUser.name,
+        email: editUser.email,
+        is_admin: editUser.is_admin,
     });
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -21,7 +22,7 @@ export default function CreateUser({ auth }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
-        router.post("create", formData);
+        router.put("edit", formData);
     };
 
     return (
@@ -29,7 +30,7 @@ export default function CreateUser({ auth }) {
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    Créer un nouvel utilisateur
+                    Modifier un utilisateur
                 </h2>
             }
         >
@@ -70,7 +71,7 @@ export default function CreateUser({ auth }) {
                     </label>
                 </div>
                 <div className="mt-4">
-                    <PrimaryButton>Créer utilisateur</PrimaryButton>
+                    <PrimaryButton>Modifier l'utilisateur</PrimaryButton>
                 </div>
             </form>
         </AuthenticatedLayout>

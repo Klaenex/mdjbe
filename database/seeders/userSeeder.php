@@ -26,13 +26,13 @@ class userSeeder extends Seeder
             'password' => Hash::make('0000'),
             'is_admin' => false,
         ]);
-        for ($i = 1; $i <= 50; $i++) {
-            DB::table('users')->insert([
-                'name' => 'User ' . $i,
-                'email' => 'user' . $i . '@example.com',
-                'password' => Hash::make('password'),
-                'is_admin' => false,
-            ]);
-        }
+        // for ($i = 1; $i <= 50; $i++) {
+        //     DB::table('users')->insert([
+        //         'name' => 'User ' . $i,
+        //         'email' => 'user' . $i . '@example.com',
+        //         'password' => Hash::make('password'),
+        //         'is_admin' => false,
+        //     ]);
+        // }
     }
 }

@@ -16,7 +16,8 @@ export default function Dashboard({ auth, users }) {
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
+            auth={auth}
+            user={users}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     Dashboard
@@ -41,13 +42,16 @@ export default function Dashboard({ auth, users }) {
                 <ul>
                     {users.data.map((user) => (
                         <li
-                            className="text-white px-5 py-2 flex justify-between block w-full border-b border-gray-900"
+                            className="text-white px-5 py-2 flex justify-between w-full border-b border-gray-900"
                             key={user.id}
                         >
                             {user.name} - {user.email}{" "}
-                            <button className="px-3 py-1 border rounded">
+                            <Link
+                                href={route("users.edit", { id: user.id })}
+                                className="px-3 py-1 border rounded"
+                            >
                                 Modifier
-                            </button>
+                            </Link>
                         </li>
                     ))}
                 </ul>

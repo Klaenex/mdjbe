@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Welcome;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -42,14 +45,22 @@ class UserController extends Controller
         }
 
         $password = Str::random(10);
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'is_admin' => $request->is_admin,
             'password' => Hash::make($password),
         ]);
 
-        return redirect()->route('users.index');
+        try {
+            $token = Password::broker()->createToken($user);
+            Mail::to($request->email)->send(new Welcome($token));
+        } catch (\Exception $e) {
+            report($e); // Cette fonction enregistre l'exception dans les logs de Laravel.
+            return redirect()->back()->withErrors(['msg' => 'Erreur lors de l\'envoi de l\'e-mail.']);
+        }
+
+        return redirect()->route('users.index')->with('message', 'Utilisateur créé et email envoyé avec succès.');
     }
 
 

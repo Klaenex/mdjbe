@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +28,11 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
-Route::get('/inscription/{token}', function ($token) {
-
-    return Inertia::render('register', ['token' => $token]);
+Route::get('/inscription/{userId}/{token}', function ($token, $userId) {
+    return Inertia::render('register', ['token' => $token, 'userId' => $userId]);
 })->name('register');
+Route::put('/inscription/{userId}/{token}', [RegisteredUserController::class, 'update'])->name('register');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

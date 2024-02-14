@@ -17,10 +17,12 @@ class Welcome extends Mailable
      * Create a new message instance.
      */
     protected $token;
-    public function __construct($token)
+    protected $userId;
+    public function __construct($token, $userId)
     {
         //
         $this->token = $token;
+        $this->userId = $userId;
     }
 
     /**
@@ -40,7 +42,10 @@ class Welcome extends Mailable
     {
         return new Content(
             view: 'emails.welcome',
-            with: ['token' => $this->token]
+            with: [
+                'token' => $this->token,
+                'userId' => $this->userId
+            ]
         );
     }
 

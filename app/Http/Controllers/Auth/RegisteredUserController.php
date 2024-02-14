@@ -29,6 +29,34 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    public function update(Request $request, $userId): RedirectResponse
+    {
+        $userId = $request->query('userId');
+        $token = $request->query('token');
+        printf($token);
+        $request->validate([
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email_verified' => ['required', 'boolean'],
+        ]);
+
+
+        $user = User::findOrFail($userId);
+
+        $user->update([
+            'password' => Hash::make($request->password),
+            'email_verified_at' => $request->email_verified ? now() : null,
+        ]);
+
+
+        return redirect(RouteServiceProvider::HOME);
+    }
+
+
+
+
+
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([

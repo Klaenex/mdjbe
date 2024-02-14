@@ -4,12 +4,10 @@ import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
-import { Head, Link, useForm } from "@inertiajs/react";
+import { Head, useForm, router } from "@inertiajs/react";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
-        email: "",
+    const { data, setData, put, processing, errors, reset } = useForm({
         password: "",
         password_confirmation: "",
     });
@@ -22,7 +20,7 @@ export default function Register() {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route("register"));
+        router.put(route("register", { userId, token }), data);
     };
 
     return (
@@ -32,7 +30,6 @@ export default function Register() {
             <form onSubmit={submit}>
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
-
                     <TextInput
                         id="password"
                         type="password"

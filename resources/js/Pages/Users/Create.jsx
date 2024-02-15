@@ -33,46 +33,48 @@ export default function CreateUser({ auth }) {
                 </h2>
             }
         >
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Nom</label>
-                    <TextInput
-                        name="name"
-                        type="text"
-                        value={formData.name}
-                        className="mt-1 block w-full"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mt-4">
-                    <label htmlFor="email">Email</label>
-                    <TextInput
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        className="mt-1 block w-full"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mt-4">
-                    <label className="flex items-center">
-                        <input
-                            type="checkbox"
-                            name="is_admin"
-                            checked={formData.is_admin}
+            <section>
+                <form onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="name">Nom</label>
+                        <TextInput
+                            name="name"
+                            type="text"
+                            value={formData.name}
+                            className="mt-1 block w-full"
                             onChange={handleChange}
+                            required
                         />
-                        <span className="ml-2 text-sm text-gray-600">
-                            Administrateur
-                        </span>
-                    </label>
-                </div>
-                <div className="mt-4">
-                    <PrimaryButton>Créer utilisateur</PrimaryButton>
-                </div>
-            </form>
+                    </div>
+                    <div className="mt-4">
+                        <label htmlFor="email">Email</label>
+                        <TextInput
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            className="mt-1 block w-full"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="mt-4">
+                        <label className="flex items-center">
+                            <input
+                                type="checkbox"
+                                name="is_admin"
+                                checked={formData.is_admin}
+                                onChange={handleChange}
+                            />
+                            <span className="ml-2 text-sm text-gray-600">
+                                Administrateur
+                            </span>
+                        </label>
+                    </div>
+                    <div className="mt-4">
+                        <PrimaryButton>Créer utilisateur</PrimaryButton>
+                    </div>
+                </form>
+            </section>
         </AuthenticatedLayout>
     );
 }

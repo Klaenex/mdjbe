@@ -13,11 +13,10 @@ export default function Dashboard({ auth, users }) {
 
         return label;
     };
-
+    console.log(auth);
     return (
         <AuthenticatedLayout
-            auth={auth}
-            user={users}
+            user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                     Dashboard

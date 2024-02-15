@@ -56,7 +56,7 @@ class UserController extends Controller
             $token = Password::broker()->createToken($user);
             Mail::to($request->email)->send(new Welcome($token, $user->id));
         } catch (\Exception $e) {
-            report($e); // Cette fonction enregistre l'exception dans les logs de Laravel.
+
             return redirect()->back()->withErrors(['msg' => 'Erreur lors de l\'envoi de l\'e-mail.']);
         }
 
@@ -75,7 +75,6 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
             'is_admin' => ['required'],
-
         ]);
 
         if ($validator->fails()) {

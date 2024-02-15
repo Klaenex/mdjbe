@@ -5,7 +5,6 @@ import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 
 export default function EditUser({ auth, editUser }) {
-    console.log(editUser);
     const [formData, setFormData] = useState({
         name: editUser.name,
         email: editUser.email,

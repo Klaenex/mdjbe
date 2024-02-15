@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import GuestLayout from "@/Layouts/GuestLayout";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
@@ -7,26 +7,37 @@ import TextInput from "@/Components/TextInput";
 import { Head, useForm, router } from "@inertiajs/react";
 
 export default function Register() {
+    const [token, setToken] = useState("");
+    const [userId, setUserId] = useState("");
     const { data, setData, put, processing, errors, reset } = useForm({
         password: "",
         password_confirmation: "",
     });
 
     useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const tokenParam = searchParams.get("token");
+        const userIdParam = searchParams.get("userId");
+
+        if (tokenParam && userIdParam) {
+            setToken(tokenParam);
+            setUserId(userIdParam);
+        }
         return () => {
             reset("password", "password_confirmation");
         };
     }, []);
 
+    const url = route("register.update", { userId: userId, token: token });
     const submit = (e) => {
         e.preventDefault();
-        router.put(route("register", { userId, token }), data);
+        console.log(data);
+        router.put(url, data);
     };
 
     return (
         <GuestLayout>
             <Head title="inscription" />
-
             <form onSubmit={submit}>
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />

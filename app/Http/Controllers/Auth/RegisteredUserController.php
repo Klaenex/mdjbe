@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,51 +28,22 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     *
      * @throws \Illuminate\Validation\ValidationException
      */
 
-    public function update(Request $request, $userId): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        $userId = $request->query('userId');
-        $token = $request->query('token');
-        printf($token);
-        $request->validate([
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'email_verified' => ['required', 'boolean'],
-        ]);
 
-
-        $user = User::findOrFail($userId);
+        $user = User::findOrFail($request->userId);
 
         $user->update([
             'password' => Hash::make($request->password),
-            'email_verified_at' => $request->email_verified ? now() : null,
+            'email_verified_at' => now()
         ]);
 
-
-        return redirect(RouteServiceProvider::HOME);
-    }
-
-
-
-
-
-
-    public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
-        $user = User::create([
-            'password' => Hash::make($request->password),
-        ]);
-
-        event(new Registered($user));
-
+        Password::broker()->deleteToken($user, $request->token);
         Auth::login($user);
-        dd($request);
+
         return redirect(RouteServiceProvider::HOME);
     }
 }

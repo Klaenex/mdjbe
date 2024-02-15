@@ -28,10 +28,14 @@ Route::get('/', function () {
     }
     return redirect()->route('login');
 });
-Route::get('/inscription/{userId}/{token}', function ($token, $userId) {
-    return Inertia::render('register', ['token' => $token, 'userId' => $userId]);
+
+
+Route::get('/inscription/{userId}/{token}', function ($userId, $token) {
+    return Inertia::render('Register', ['userId' => $userId, 'token' => $token]);
 })->name('register');
-Route::put('/inscription/{userId}/{token}', [RegisteredUserController::class, 'update'])->name('register');
+Route::put('/inscription', [RegisteredUserController::class, 'update'])->name('register.update');
+
+
 
 
 Route::get('/dashboard', function () {

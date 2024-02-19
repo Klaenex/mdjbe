@@ -19,6 +19,7 @@ class userSeeder extends Seeder
             'email' => 'vincent.cuozzo@fcjmp.be',
             'password' => Hash::make('0000'),
             'is_admin' => true,
+
         ]);
         DB::table('users')->insert([
             'name' => 'Admin',

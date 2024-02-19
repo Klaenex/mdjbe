@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('tel')->nullable();
             $table->string('slug')->unique();
             $table->string('region');
+            $table->boolean('active');
             $table->timestamps();
 
 

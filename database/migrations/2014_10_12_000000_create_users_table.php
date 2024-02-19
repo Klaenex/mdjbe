@@ -18,11 +18,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_admin')->default(0);
-            $table->unsignedBigInteger('mdj_id');
+            $table->unsignedBigInteger('mdj_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('mdjs')->reference('id')->on('mdjs');
+            $table->foreign('mdj_id')->references('id')->on('mdjs');
         });
     }
 

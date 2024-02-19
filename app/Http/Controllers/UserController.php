@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\Welcome;
 use App\Models\User;
+use App\Models\Mdjs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -43,14 +44,18 @@ class UserController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+        try {
+            $password = Str::random(10);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'is_admin' => $request->is_admin,
+                'password' => Hash::make($password),
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['msg' => "Erreur lors de la création de l'utilisateur"]);
+        }
 
-        $password = Str::random(10);
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'is_admin' => $request->is_admin,
-            'password' => Hash::make($password),
-        ]);
 
         try {
             $token = Password::broker()->createToken($user);

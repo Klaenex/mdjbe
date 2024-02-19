@@ -33,9 +33,9 @@ export default function CreateUser({ auth }) {
                 </h2>
             }
         >
-            <section>
+            <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit}>
-                    <div>
+                    <div className="text-white">
                         <label htmlFor="name">Nom</label>
                         <TextInput
                             name="name"
@@ -46,7 +46,7 @@ export default function CreateUser({ auth }) {
                             required
                         />
                     </div>
-                    <div className="mt-4">
+                    <div className="text-white mt-4">
                         <label htmlFor="email">Email</label>
                         <TextInput
                             name="email"

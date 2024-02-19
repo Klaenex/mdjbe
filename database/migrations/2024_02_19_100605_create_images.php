@@ -11,26 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_admin')->default(0);
+            $table->string('path');
+            $table->boolean('logo')->default(false);
+            $table->string('desc')->nullable();
+            $table->string('ext');
             $table->unsignedBigInteger('mdj_id');
-            $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('mdjs')->reference('id')->on('mdjs');
+            // Clé étrangère
+            $table->foreign('mdj_id')->references('id')->on('mdjs')
+                ->onDelete('cascade');
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('images');
     }
 };

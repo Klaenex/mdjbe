@@ -36,8 +36,10 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'is_admin' => ['required']
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'is_admin' => ['required'],
+            'mj' => ['required']
         ]);
         if ($validator->fails()) {
             return redirect()->back()
@@ -56,7 +58,14 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['msg' => "Erreur lors de la création de l'utilisateur"]);
         }
 
+        try {
+            Mdjs::create([
+                'name' => $request->mj
+            ]);
+        } catch (\Exception $e) {
 
+            return redirect()->back()->withErrors(['msg' => 'Erreur lors de la création de la maison de jeunes']);
+        }
         try {
             $token = Password::broker()->createToken($user);
             Mail::to($request->email)->send(new Welcome($token, $user->id));

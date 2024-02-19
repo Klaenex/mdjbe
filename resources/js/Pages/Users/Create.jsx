@@ -8,6 +8,7 @@ export default function CreateUser({ auth }) {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        mj: "",
         is_admin: 0,
     });
     const handleChange = (e) => {
@@ -52,6 +53,17 @@ export default function CreateUser({ auth }) {
                             name="email"
                             type="email"
                             value={formData.email}
+                            className="mt-1 block w-full"
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="text-white mt-4">
+                        <label htmlFor="mj">Nom de la Mj</label>
+                        <TextInput
+                            name="mj"
+                            type="text"
+                            value={formData.mj}
                             className="mt-1 block w-full"
                             onChange={handleChange}
                             required

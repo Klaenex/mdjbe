@@ -14,22 +14,22 @@ return new class extends Migration
         Schema::create('mdjs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->longText('location');
-            $table->longText('objective');
+            $table->longText('location')->nullable();
+            $table->longText('objective')->nullable();
             $table->longText('tagline')->nullable();
-            $table->string('street');
+            $table->string('street')->nullable();
             $table->unsignedBigInteger('dispositif_particulier')->nullable();
-            $table->string('number');
-            $table->string('postal_code');
-            $table->string('city');
-            $table->string('email')->unique();
+            $table->string('number')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->string('city')->nullable();
+            $table->string('email')->unique()->nullable();
             $table->string('site')->nullable();
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
             $table->string('tel')->nullable();
-            $table->string('slug')->unique();
-            $table->string('region');
-            $table->boolean('active');
+            $table->string('slug')->unique()->nullable();
+            $table->string('region')->nullable();
+            $table->boolean('active')->default(0);
             $table->timestamps();
 
 

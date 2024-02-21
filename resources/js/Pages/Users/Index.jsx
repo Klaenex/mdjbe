@@ -24,6 +24,7 @@ export default function Dashboard({ auth, users }) {
             }
         >
             <Head title="Utilisateurs" />
+
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div className="flex justify-between items-center">
                     <h1 className="text-white py-5 text-xl font-semibold ">

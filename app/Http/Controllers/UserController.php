@@ -38,23 +38,28 @@ class UserController extends Controller
             'mj' => 'required|string',
         ]);
 
-        $password = Str::random(10);
 
-        $user = User::create([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($password),
-            'is_admin' => $validatedData['is_admin'],
-        ]);
+        try {
+            $password = Str::random(10);
 
-        Mdjs::create([
-            'name' => $validatedData['mj'],
-        ]);
+            $user = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($password),
+                'is_admin' => $validatedData['is_admin'],
+            ]);
 
-        $token = Password::broker()->createToken($user);
-        Mail::to($user->email)->send(new Welcome($token, $user->id));
+            Mdjs::create([
+                'name' => $validatedData['mj'],
+            ]);
 
-        return redirect()->route('users.index')->with('message', 'Utilisateur créé et email envoyé avec succès.');
+            $token = Password::broker()->createToken($user);
+            Mail::to($user->email)->send(new Welcome($token, $user->id));
+
+            return redirect()->route('users.index')->with('success', 'Utilisateur créé et email envoyé avec succès.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erreur lors de la création de l\'utilisateur.')->withInput();
+        }
     }
 
     public function edit($id)
@@ -72,10 +77,14 @@ class UserController extends Controller
             'is_admin' => 'required|boolean',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->update($validatedData);
 
-        return redirect()->route('users.index')->with('message', 'Utilisateur mis à jour avec succès.');
+        try {
+            $user = User::findOrFail($id);
+            $user->update($validatedData);
+            return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Erreur lors de la modification de l\'utilisateur.');
+        }
     }
 
     public function destroy($id)

@@ -1,7 +1,23 @@
+import { useState, useEffect } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+import Notification from "@/Components/Notification";
 
 export default function Dashboard({ auth, users }) {
+    const [notification, setNotification] = useState({
+        show: false,
+        message: "",
+        type: "success",
+    });
+
+    useEffect(() => {
+        if (auth.flash.success) {
+            setNotification({ show: true, message: auth.flash.success });
+        } else if (auth.flash.error) {
+            setNotification({ show: true, message: auth.flash.success });
+        }
+    }, [auth.flash]);
+
     const customizePaginationLabels = (link) => {
         let label = link.label.replace("&laquo;", "«").replace("&raquo;", "»");
 
@@ -13,18 +29,26 @@ export default function Dashboard({ auth, users }) {
 
         return label;
     };
-    console.log(auth);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
                 <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    Dashboard
+                    Utilisateurs
                 </h2>
             }
         >
             <Head title="Utilisateurs" />
 
+            <Notification
+                show={notification.show}
+                message={notification.message}
+                type={notification.type}
+                onClose={() =>
+                    setNotification({ ...notification, show: false })
+                }
+            />
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div className="flex justify-between items-center">
                     <h1 className="text-white py-5 text-xl font-semibold ">

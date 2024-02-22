@@ -8,6 +8,7 @@ import { Link } from "@inertiajs/react";
 export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -28,12 +29,24 @@ export default function Authenticated({ user, header, children }) {
                                     Dashboard
                                 </NavLink>
                                 {user.is_admin === 1 && (
-                                    <NavLink
-                                        href={route("users.index")}
-                                        active={route().current("users.index")}
-                                    >
-                                        Utilisateurs
-                                    </NavLink>
+                                    <>
+                                        <NavLink
+                                            href={route("users.index")}
+                                            active={route().current(
+                                                "users.index"
+                                            )}
+                                        >
+                                            Utilisateurs
+                                        </NavLink>
+                                        <NavLink
+                                            href={route("Mdjs.index")}
+                                            active={route().current(
+                                                "Mdjs.index"
+                                            )}
+                                        >
+                                            Maisons de jeunes
+                                        </NavLink>
+                                    </>
                                 )}
                             </div>
                         </div>

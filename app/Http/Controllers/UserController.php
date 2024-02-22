@@ -91,6 +91,6 @@ class UserController extends Controller
     {
         User::findOrFail($id)->delete();
 
-        return redirect()->route('users.index')->with('message', 'Utilisateur supprimé avec succès.');
+        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');
     }
 }

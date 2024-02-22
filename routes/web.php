@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MdjController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -52,10 +53,14 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users/create', [UserController::class, 'store']);
-
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}/edit', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+
+
+    Route::get('/mdjs', [MdjController::class, 'index'])->name('mdjs.index');
 });
 
 require __DIR__ . '/auth.php';

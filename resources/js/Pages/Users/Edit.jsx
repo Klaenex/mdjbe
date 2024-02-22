@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { router } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import PrimaryButton from "@/Components/PrimaryButton";
@@ -41,6 +41,8 @@ export default function EditUser({ auth, editUser }) {
                 </h2>
             }
         >
+            <Head title="Modification utilisateurs" />
+
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit}>
                     <div className="text-white">

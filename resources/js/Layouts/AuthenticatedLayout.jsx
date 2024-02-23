@@ -39,9 +39,9 @@ export default function Authenticated({ user, header, children }) {
                                             Utilisateurs
                                         </NavLink>
                                         <NavLink
-                                            href={route("Mdjs.index")}
+                                            href={route("mdjs.index")}
                                             active={route().current(
-                                                "Mdjs.index"
+                                                "mdjs.index"
                                             )}
                                         >
                                             Maisons de jeunes

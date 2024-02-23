@@ -15,7 +15,9 @@ export default function Dashboard({ auth }) {
         >
             <Head title="Maisons de jeunes" />
 
-            <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"></section>
+            <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+                test
+            </section>
         </AuthenticatedLayout>
     );
 }

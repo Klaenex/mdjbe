@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Notification from "@/Components/Notification";
 
-export default function Dashboard({ auth, users }) {
+export default function UserPage({ auth, users }) {
     const [notification, setNotification] = useState({
         show: false,
         message: "",

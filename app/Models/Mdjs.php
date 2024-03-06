@@ -28,7 +28,7 @@ class Mdjs extends Model
         'tel',
         'slug',
         'region',
-        'active'
+        'active', 'id_user'
     ]; // Attributs assignables en masse
 
     public function dispositifParticulier()

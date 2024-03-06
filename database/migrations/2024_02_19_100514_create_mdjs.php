@@ -31,8 +31,10 @@ return new class extends Migration
             $table->string('region')->nullable();
             $table->boolean('active')->default(0);
             $table->timestamps();
+            $table->unsignedBigInteger('id_user')->nullable();
 
 
+            $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('dispositif_particulier')->references('id')->on('dispositif_particulier');
         });
     }

@@ -196,7 +196,7 @@ export default function Authenticated({ user, header, children }) {
                 </header>
             )}
 
-            <main className="dark:bg-gray-800 w-5/6 flex flex-col my-8 mx-12 shadow">
+            <main className="dark:bg-gray-800 w-5/6 flex flex-col shadow my-8 mx-auto max-w-5xl">
                 {children}
             </main>
         </div>

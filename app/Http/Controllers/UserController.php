@@ -47,10 +47,12 @@ class UserController extends Controller
                 'email' => $validatedData['email'],
                 'password' => Hash::make($password),
                 'is_admin' => $validatedData['is_admin'],
+
             ]);
 
-            Mdjs::create([
+            $mdjs = Mdjs::create([
                 'name' => $validatedData['mj'],
+                'id_user' => $user['id']
             ]);
 
             $token = Password::broker()->createToken($user);

@@ -61,6 +61,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
 
     Route::get('/mdjs', [MdjController::class, 'index'])->name('mdjs.index');
+    Route::get('/mdjs/{mdj}/edit', [MdjController::class, 'edit'])->name('mdjs.edit');
 });
+
 
 require __DIR__ . '/auth.php';

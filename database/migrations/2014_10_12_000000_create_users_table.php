@@ -22,7 +22,8 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
 
-            $table->foreign('mdj_id')->references('id')->on('mdjs');
+            // Ajout de la contrainte de clé étrangère
+            $table->foreign('mdj_id')->references('id')->on('mdjs')->onDelete('set null');
         });
     }
 
@@ -31,6 +32,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            // Suppression de la contrainte de clé étrangère avant de supprimer la table
+            $table->dropForeign(['mdj_id']);
+        });
+
         Schema::dropIfExists('users');
     }
 };

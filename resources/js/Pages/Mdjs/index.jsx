@@ -3,7 +3,21 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Notification from "@/Components/Notification";
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ auth, mdjs }) {
+    const [notification, setNotification] = useState({
+        show: false,
+        message: "",
+        type: "success",
+    });
+
+    useEffect(() => {
+        if (auth.flash.success) {
+            setNotification({ show: true, message: auth.flash.success });
+        } else if (auth.flash.error) {
+            setNotification({ show: true, message: auth.flash.success });
+        }
+    }, [auth.flash]);
+
     const customizePaginationLabels = (link) => {
         let label = link.label.replace("&laquo;", "«").replace("&raquo;", "»");
 
@@ -32,6 +46,22 @@ export default function Dashboard({ auth }) {
                         Liste des maisons de jeunes
                     </h1>
                 </div>
+                <ul>
+                    {mdjs.data.map((mdj) => (
+                        <li
+                            className="text-white px-5 py-2 flex justify-between w-full border-b border-gray-900"
+                            key={mdj.id}
+                        >
+                            {mdj.name}
+                            <Link
+                                href={route("mdjs.edit", { id: mdj.id })}
+                                className="px-3 py-1 border rounded"
+                            >
+                                Modifier
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
             </section>
         </AuthenticatedLayout>
     );

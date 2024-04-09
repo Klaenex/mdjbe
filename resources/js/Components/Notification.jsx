@@ -4,11 +4,10 @@ export default function Notification({
     show,
     message,
     onClose,
-    type = "success",
+    type,
     duration = 3000,
 }) {
     const [isVisible, setIsVisible] = useState(show);
-
     useEffect(() => {
         if (show) {
             setIsVisible(true); // Affiche la notification

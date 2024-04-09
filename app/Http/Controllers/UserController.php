@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\Welcome;
 use App\Models\User;
 use App\Models\Mdjs;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -29,38 +31,42 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'is_admin' => 'required|boolean',
-            'mj' => 'required|string',
-        ]);
+        // Validation des données entrantes
+        $validatedData = $request->validated();
 
-
+        \DB::beginTransaction(); // Début de la transaction
         try {
             $password = Str::random(10);
-
+            // Création de l'utilisateur
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($password),
                 'is_admin' => $validatedData['is_admin'],
-
             ]);
 
-            $mdjs = Mdjs::create([
+            // Création d'un enregistrement associé dans `mdjs`
+            Mdjs::create([
                 'name' => $validatedData['mj'],
-                'id_user' => $user['id']
+                'user_id' => $user->id,
             ]);
 
-            $token = Password::broker()->createToken($user);
-            Mail::to($user->email)->send(new Welcome($token, $user->id));
+            // $token = Password::broker()->createToken($user);
+            // Mail::to($user->email)->send(new Welcome($token, $user->id));
+
+            \DB::commit(); // Validation de la transaction
 
             return redirect()->route('users.index')->with('success', 'Utilisateur créé et email envoyé avec succès.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            \DB::rollBack();
+
+            return back()->with('error', 'Erreur de base de données lors de la création de l\'utilisateur.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Erreur lors de la création de l\'utilisateur.')->withInput();
+            \DB::rollBack();
+
+            return back()->with('error', 'Erreur lors de la création de l\'utilisateur.');
         }
     }
 
@@ -71,23 +77,21 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'is_admin' => 'required|boolean',
-        ]);
-
+        // Messages d'erreur personnalisés
+        $validatedData = $request->validated();
 
         try {
             $user = User::findOrFail($id);
             $user->update($validatedData);
             return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
         } catch (\Exception $e) {
-            return redirect()->route('users.index')->with('error', 'Erreur lors de la modification de l\'utilisateur.');
+
+            return back()->with('error', 'Erreur lors de la modification de l\'utilisateur.')->withInput();
         }
     }
+
 
     public function destroy($id)
     {

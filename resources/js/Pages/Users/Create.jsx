@@ -1,10 +1,42 @@
-import React, { useState } from "react";
-import { router } from "@inertiajs/react";
+import { useState, useEffect } from "react";
+import { router, Head } from "@inertiajs/react";
+
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
-import PrimaryButton from "@/Components/PrimaryButton";
 
-export default function CreateUser({ auth }) {
+import PrimaryButton from "@/Components/PrimaryButton";
+import Notification from "@/Components/Notification";
+export default function CreateUser({ auth, errors }) {
+    const [notification, setNotification] = useState({
+        show: false,
+        message: "",
+        type: "success",
+    });
+    useEffect(() => {
+        if (auth.flash.success) {
+            setNotification({
+                show: true,
+                message: auth.flash.success,
+                type: "success",
+            });
+        } else if (auth.flash.error) {
+            setNotification({
+                show: true,
+                message: auth.flash.error,
+                type: "error",
+            });
+        }
+    }, [auth.flash.success, auth.flash.error]);
+    useEffect(() => {
+        if (errors.email) {
+            setNotification({
+                show: true,
+                message: errors.email,
+                type: "error",
+            });
+        }
+    }, [errors.email]);
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -34,6 +66,15 @@ export default function CreateUser({ auth }) {
                 </h2>
             }
         >
+            <Head title="Création d'utilisateurs" />
+            <Notification
+                show={notification.show}
+                message={notification.message}
+                type={notification.type}
+                onClose={() =>
+                    setNotification({ ...notification, show: false })
+                }
+            />
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit}>
                     <div className="text-white">

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use app\Models\Mdjs;
+
 class Image extends Model
 {
     use HasFactory;
@@ -51,6 +53,6 @@ class Image extends Model
      */
     public function mdj()
     {
-        return $this->belongsTo(Mdj::class);
+        return $this->belongsTo(Mdjs::class);
     }
 }

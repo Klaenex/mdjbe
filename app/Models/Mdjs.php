@@ -28,9 +28,9 @@ class Mdjs extends Model
         'tel',
         'slug',
         'region',
-        'active', 'id_user'
-    ]; // Attributs assignables en masse
-
+        'active',
+        'id_user'
+    ];
     public function dispositifParticulier()
     {
         return $this->belongsTo(DispositifParticulier::class, 'dispositif_particulier');

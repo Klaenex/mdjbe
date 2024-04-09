@@ -3,21 +3,37 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Notification from "@/Components/Notification";
 
-export default function UserPage({ auth, users }) {
+export default function UserPage({ auth, users, errors }) {
     const [notification, setNotification] = useState({
         show: false,
         message: "",
         type: "success",
     });
-
     useEffect(() => {
         if (auth.flash.success) {
-            setNotification({ show: true, message: auth.flash.success });
+            setNotification({
+                show: true,
+                message: auth.flash.success,
+                type: "success",
+            });
         } else if (auth.flash.error) {
-            setNotification({ show: true, message: auth.flash.success });
+            setNotification({
+                show: true,
+                message: auth.flash.error,
+                type: "error",
+            });
         }
-    }, [auth.flash]);
-
+    }, [auth.flash.success, auth.flash.error]);
+    useEffect(() => {
+        if (errors.email) {
+            console.log(errors.email);
+            setNotification({
+                show: true,
+                message: errors.email,
+                type: "error",
+            });
+        }
+    }, [errors.email]);
     const customizePaginationLabels = (link) => {
         let label = link.label.replace("&laquo;", "«").replace("&raquo;", "»");
 

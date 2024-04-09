@@ -4,15 +4,30 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import TextArea from "@/Components/TextArea";
 import PrimaryButton from "@/Components/PrimaryButton";
-export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
+export default function EditMdj({
+    auth,
+    editMdj,
+    dispositifsParticulier,
+    img,
+}) {
     const [formData, setFormData] = useState({
         name: editMdj.name,
         tagLine: editMdj.tagline,
         logo: editMdj.logo,
         location: editMdj.location,
         objective: editMdj.objective,
+        street: editMdj.street,
+        number: editMdj.number,
+        city: editMdj.city,
+        postal_code: editMdj.postal_code,
+        tel: editMdj.tel,
+        email: editMdj.email,
+        site: editMdj.site,
+        face: editMdj.facebook,
+        instagram: editMdj.instagram,
+        DP: {},
     });
-    console.log(dispositifsParticulier);
+
     const [imagePreview, setImagePreview] = useState(
         editMdj.logo ? `URL_DE_VOTRE_SERVEUR/${editMdj.logo}` : null
     );
@@ -156,17 +171,103 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
                             </select>
                         </div>
                         <div className="text-white">
-                            <label htmlFor="objective">
-                                Principaux enjeux et objectif
-                            </label>
-                            <TextArea
-                                name="objective"
-                                type="text"
-                                value={formData.objective}
+                            <label htmlFor="objective">Projets porteurs</label>
+                            <ul></ul>
+
+                            <PrimaryButton>Ajouter</PrimaryButton>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className="text-white">
+                            <label htmlFor="photo">Photo</label>
+                            <TextInput
+                                name="photo"
+                                type="file"
                                 className="mt-1 block w-full"
                                 onChange={handleChange}
                                 required
                             />
+                            {imagePreview && (
+                                <img
+                                    src={imagePreview}
+                                    alt="Aperçu du logo"
+                                    className="mt-2"
+                                    style={{ width: "100px", height: "100px" }}
+                                />
+                            )}
+                        </div>
+                        <div className="text-white">
+                            <label htmlFor="photo2">Photo2</label>
+                            <TextInput
+                                name="photo2"
+                                type="file"
+                                className="mt-1 block w-full"
+                                onChange={handleChange}
+                                required
+                            />
+                            {imagePreview && (
+                                <img
+                                    src={imagePreview}
+                                    alt="Aperçu du logo"
+                                    className="mt-2"
+                                    style={{ width: "100px", height: "100px" }}
+                                />
+                            )}
+                        </div>
+                    </div>
+                    <div className="text-white">
+                        <h3 className="text-white text-2xl">
+                            Adresse et contact
+                        </h3>
+                        <div>
+                            <div>
+                                <label htmlFor="rue">Rue</label>
+                                <TextInput
+                                    name="rue"
+                                    type="text"
+                                    value={formData.street}
+                                    className="mt-1 block w-1/3"
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="N">N°</label>
+                                <TextInput />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <label htmlFor="ville">Ville</label>
+                                <TextInput />
+                            </div>
+                            <div>
+                                <label htmlFor="codepostal">Code postal</label>
+                                <TextInput />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="tel">Téléphone</label>
+                            <TextInput />
+                        </div>
+                        <div>
+                            <label htmlFor="email">Email</label>
+                            <TextInput />
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <label htmlFor="web">Site web</label>
+                            <TextInput />
+                        </div>
+                        <div>
+                            <label htmlFor="face">Facebook</label>
+                            <TextInput />
+                        </div>
+                        <div>
+                            <label htmlFor="email">Instagram</label>
+                            <TextInput />
                         </div>
                     </div>
                     <div className="mt-4">

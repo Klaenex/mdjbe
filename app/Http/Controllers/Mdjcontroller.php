@@ -22,7 +22,8 @@ class Mdjcontroller extends Controller
         return Inertia::render('Mdjs/Edit', [
             'editMdj' => Mdjs::findOrFail($id),
             'dispositifsParticulier' => DispositifParticulier::All(),
-            'img' => Image::where('mdj_id', $id)
+            'img' => Image::where('mdj_id', $id),
+
         ]);
     }
 };

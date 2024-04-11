@@ -62,6 +62,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::get('/mdjs', [MdjController::class, 'index'])->name('mdjs.index');
     Route::get('/mdjs/{mdj}/edit', [MdjController::class, 'edit'])->name('mdjs.edit');
+    Route::put('/mdjs/{mdj}/edit', [MdjController::class, 'update'])->name('mdjs.update');
 });
 
 

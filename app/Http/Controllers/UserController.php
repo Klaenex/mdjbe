@@ -79,7 +79,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, $id)
     {
-        // Messages d'erreur personnalisés
+
         $validatedData = $request->validated();
 
         try {

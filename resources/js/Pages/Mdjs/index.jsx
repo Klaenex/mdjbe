@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import Notification from "@/Components/Notification";
 
-export default function Dashboard({ auth, mdjs }) {
+export default function Dashboard({ auth, mdjs, errors }) {
     const [notification, setNotification] = useState({
         show: false,
         message: "",
@@ -39,7 +39,14 @@ export default function Dashboard({ auth, mdjs }) {
             }
         >
             <Head title="Maisons de jeunes" />
-
+            <Notification
+                show={notification.show}
+                message={notification.message}
+                type={notification.type}
+                onClose={() =>
+                    setNotification({ ...notification, show: false })
+                }
+            />
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div className="flex justify-between items-center">
                     <h1 className="text-white py-5 text-xl font-semibold ">

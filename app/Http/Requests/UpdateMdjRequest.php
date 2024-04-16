@@ -34,4 +34,11 @@ class UpdateMdjRequest extends FormRequest
 
         ];
     }
+    public function messages()
+    {
+        return [
+            'postal_code.regex' => 'Le code postal doit être un numéro à 4 chiffres.',
+            'tel.regex' => 'Le numéro de téléphone doit être un numéro belge valide, commençant par +32 ou 0, suivi d’un chiffre entre 1 et 9, puis de 6 à 10 chiffres supplémentaires.',
+        ];
+    }
 }

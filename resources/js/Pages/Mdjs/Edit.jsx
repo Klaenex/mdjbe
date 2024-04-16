@@ -1,9 +1,10 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Head, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import BaseMdj from "@/Components/partFormMdjs/BaseMdj";
 import AdressMdj from "@/Components/partFormMdjs/AdressMdj";
+import Notification from "@/Components/Notification";
 
 export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
     const { data, setData, put, errors, processing } = useForm({
@@ -17,6 +18,36 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         tel: editMdj.tel || "",
         // Ajoutez d'autres champs si nécessaire
     });
+
+    const [notification, setNotification] = useState({
+        show: false,
+        message: "",
+        type: "success",
+    });
+    useEffect(() => {
+        if (auth.flash.success) {
+            setNotification({
+                show: true,
+                message: auth.flash.success,
+                type: "success",
+            });
+        } else if (auth.flash.error) {
+            setNotification({
+                show: true,
+                message: auth.flash.error,
+                type: "error",
+            });
+        }
+
+        if (errors && Object.keys(errors).length > 0) {
+            const firstErrorKey = Object.keys(errors)[0];
+            setNotification({
+                show: true,
+                message: errors[firstErrorKey],
+                type: "error",
+            });
+        }
+    }, [auth.flash, errors]);
 
     const onChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -43,6 +74,14 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
             }
         >
             <Head title="Modification une maison de jeune" />
+            <Notification
+                show={notification.show}
+                message={notification.message}
+                type={notification.type}
+                onClose={() =>
+                    setNotification({ ...notification, show: false })
+                }
+            />
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                     <BaseMdj data={data} onChange={onChange} errors={errors} />

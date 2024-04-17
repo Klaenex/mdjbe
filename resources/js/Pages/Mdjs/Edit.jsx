@@ -92,7 +92,9 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
-                    <FilesInput />
+                    <FilesInput
+                        onFileChange={(file) => setData("avatar", file)}
+                    />
                     <div>
                         <AdressMdj
                             data={data}

@@ -14,7 +14,6 @@ export default function FilesInput({ onFileSelect }) {
             };
             reader.readAsDataURL(file);
 
-            // Appeler le callback pour remonter le fichier sélectionné
             onFileSelect(file);
         } else {
             setPreview(null);

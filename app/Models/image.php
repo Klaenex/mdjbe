@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use app\Models\Mdjs;
+use App\Models\Mdjs;
 
 class Image extends Model
 {

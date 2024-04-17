@@ -5,6 +5,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import BaseMdj from "@/Components/partFormMdjs/BaseMdj";
 import AdressMdj from "@/Components/partFormMdjs/AdressMdj";
 import Notification from "@/Components/Notification";
+import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
+import FilesInput from "@/Components/FilesInput";
 
 export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
     const { data, setData, put, errors, processing } = useForm({
@@ -16,6 +18,11 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         number: editMdj.number || "",
         city: editMdj.city || "",
         tel: editMdj.tel || "",
+        postal_code: editMdj.postal_code || "",
+        email: editMdj.email || "",
+        site: editMdj.site || "",
+        facebook: editMdj.facebook || "",
+        instagram: editMdj.instagram || "",
         // Ajoutez d'autres champs si nécessaire
     });
 
@@ -85,11 +92,20 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
-                    <AdressMdj
-                        data={data}
-                        onChange={onChange}
-                        errors={errors}
-                    />
+                    <FilesInput />
+                    <div>
+                        <AdressMdj
+                            data={data}
+                            onChange={onChange}
+                            errors={errors}
+                        />
+                        <NetworksMdj
+                            data={data}
+                            onChange={onChange}
+                            errors={errors}
+                        />
+                    </div>
+
                     <div className="mt-4">
                         <PrimaryButton disabled={processing}>
                             Modifier la maison de jeune

@@ -57,10 +57,11 @@ class Mdjcontroller extends Controller
 
             DB::commit();
 
-            return redirect()->route('nom.de.la.route.pour.afficher.mdj', $mdj->id)
-                ->with('message', 'Mdj mise à jour avec succès.');
+            return redirect()->route('mdjs.edit', $mdj->id)
+                ->with('success', 'La maison de jeunes a été mise à jour avec succès.');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e);
             return back()->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour.']);
         }
     }

@@ -23,7 +23,7 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         site: editMdj.site || "",
         facebook: editMdj.facebook || "",
         instagram: editMdj.instagram || "",
-        // Ajoutez d'autres champs si nécessaire
+        avatar: null, // Ajout d'un champ pour gérer le fichier
     });
 
     const [notification, setNotification] = useState({
@@ -32,33 +32,25 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         type: "success",
     });
     useEffect(() => {
-        if (auth.flash.success) {
-            setNotification({
-                show: true,
-                message: auth.flash.success,
-                type: "success",
-            });
-        } else if (auth.flash.error) {
-            setNotification({
-                show: true,
-                message: auth.flash.error,
-                type: "error",
-            });
-        }
+        const messageType = auth.flash.success ? "success" : "error";
+        const messageContent =
+            auth.flash.success ||
+            auth.flash.error ||
+            (errors &&
+                Object.keys(errors).length > 0 &&
+                errors[Object.keys(errors)[0]]);
 
-        if (errors && Object.keys(errors).length > 0) {
-            const firstErrorKey = Object.keys(errors)[0];
+        if (messageContent) {
             setNotification({
                 show: true,
-                message: errors[firstErrorKey],
-                type: "error",
+                message: messageContent,
+                type: messageType,
             });
         }
     }, [auth.flash, errors]);
 
     const onChange = (e) => {
         const { name, value, type, checked } = e.target;
-
         setData((data) => ({
             ...data,
             [name]: type === "checkbox" ? checked : value,
@@ -67,8 +59,10 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        put(`/mdjs/${editMdj.id}/edit`, data, {
+            forceFormData: true, // S'assurer d'utiliser FormData pour inclure le fichier
+        });
         console.log(data);
-        put(`/mdjs/${editMdj.id}/edit`);
     };
 
     return (
@@ -90,24 +84,27 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
                 }
             />
             <section className="my-10 mx-7 p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-10"
+                    encType="multipart/form-data"
+                >
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
                     <FilesInput
-                        onFileChange={(file) => setData("avatar", file)}
+                        onFileChange={(file) =>
+                            setData({ ...data, avatar: file })
+                        }
                     />
-                    <div>
-                        <AdressMdj
-                            data={data}
-                            onChange={onChange}
-                            errors={errors}
-                        />
-                        <NetworksMdj
-                            data={data}
-                            onChange={onChange}
-                            errors={errors}
-                        />
-                    </div>
-
+                    <AdressMdj
+                        data={data}
+                        onChange={onChange}
+                        errors={errors}
+                    />
+                    <NetworksMdj
+                        data={data}
+                        onChange={onChange}
+                        errors={errors}
+                    />
                     <div className="mt-4">
                         <PrimaryButton disabled={processing}>
                             Modifier la maison de jeune

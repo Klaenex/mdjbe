@@ -77,28 +77,36 @@ class MdjController extends Controller
     {
         if ($file->isValid()) {
             $directory = $isLogo ? 'images/logo' : 'images/photos';
-            // $oldImage = Image::where('mdj_id', $mdj->id)->get();
-            // dd($oldImage);
 
-            // if ($oldImage) {
-            //     Storage::disk('public')->delete($oldImage->path);
-            //     $oldImage->delete();
+            // Supprimez l'ancien fichier si c'est un logo et qu'un nouveau est téléchargé
+            // if ($isLogo) {
+            //     $oldImage = $mdj->images()->where('logo', true)->first();
+            //     if ($oldImage) {
+            //         Storage::disk('public')->delete($oldImage->path);
+            //         $oldImage->delete();
+            //     }
             // }
+            $images = Image::where('mdj_id', $mdj->id)->get();
+            dd($images);
 
             try {
+                // Stockage du nouveau fichier
                 $path = $file->store($directory, 'public');
 
-                $mdj->images()->create([
+                // Création d'une nouvelle instance de l'image
+                Image::create([
                     'mdj_id' => $mdj->id,
                     'path' => $path,
                     'name' => $file->getClientOriginalName(),
-                    'ext' => $file->extensoin(),
+                    'ext' => $file->extension(),
                     'logo' => $isLogo,
                     'desc' => $isLogo ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
                 ]);
             } catch (\Exception $e) {
+                // Enregistrez l'erreur et retournez une réponse avec l'erreur
                 Log::error("Erreur lors de l'upload de l'image {$fieldName}: {$e->getMessage()}");
-                return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$fieldName}"]);
+                // Retournez l'erreur à l'utilisateur
+                return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$fieldName}: {$e->getMessage()}"]);
             }
         } else {
             Log::error("Fichier invalide pour le champ {$fieldName}.");

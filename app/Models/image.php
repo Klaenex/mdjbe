@@ -26,7 +26,7 @@ class Image extends Model
     protected $fillable = [
         'name',
         'path',
-        'logo',
+        'type',
         'desc',
         'ext',
         'mdj_id',

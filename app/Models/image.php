@@ -44,10 +44,7 @@ class Image extends Model
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'logo' => 'boolean',
-    ];
-
+    protected $casts = [];
     /**
      * Obtenez la maison de jeune associée à l'image.
      */

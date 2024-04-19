@@ -23,7 +23,9 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         site: editMdj.site || "",
         facebook: editMdj.facebook || "",
         instagram: editMdj.instagram || "",
-        logo: null, // Ajout d'un champ pour gérer le fichier
+        logo: null,
+        image1: null,
+        image2: null,
     });
 
     const [notification, setNotification] = useState({
@@ -97,6 +99,20 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
                         }
                         htmlFor="logo"
                         label="Logo"
+                    />
+                    <FilesInput
+                        onFileChange={(file) =>
+                            setData({ ...data, image1: file })
+                        }
+                        htmlFor="image1"
+                        label="Image 1"
+                    />
+                    <FilesInput
+                        onFileChange={(file) =>
+                            setData({ ...data, image2: file })
+                        }
+                        htmlFor="image2"
+                        label="Image 2"
                     />
                     <AdressMdj
                         data={data}

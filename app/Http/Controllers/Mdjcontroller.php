@@ -87,7 +87,8 @@ class MdjController extends Controller
             //     }
             // }
             $images = Image::where('mdj_id', $mdj->id)->get();
-            dd($images);
+
+
 
             try {
                 // Stockage du nouveau fichier

@@ -47,8 +47,23 @@ class UpdateMdjRequest extends FormRequest
                 'mimes:jpeg,png,jpg,gif,svg',
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
+            ],
+            'image1' => [
+                'nullable',
+                'file',
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:2048',
+                'dimensions:min_width=100,min_height=100'
+            ],
+            'image2' => [
+                'nullable',
+                'file',
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:2048',
+                'dimensions:min_width=100,min_height=100'
             ]
-
         ];
     }
 
@@ -61,7 +76,15 @@ class UpdateMdjRequest extends FormRequest
             'logo.image' => 'Le fichier du logo doit être une image.',
             'logo.mimes' => 'Le logo doit être au format jpeg, png, jpg, gif, ou svg.',
             'logo.max' => 'Le logo ne doit pas dépasser 2MB.',
-            'logo.dimensions' => 'Le logo doit avoir au moins 100x100 pixels.'
+            'logo.dimensions' => 'Le logo doit avoir au moins 100x100 pixels.',
+            'image1.image' => 'Le fichier de l’image 1 doit être une image.',
+            'image1.mimes' => 'L’image 1 doit être au format jpeg, png, jpg, gif, ou svg.',
+            'image1.max' => 'L’image 1 ne doit pas dépasser 2MB.',
+            'image1.dimensions' => 'L’image 1 doit avoir au moins 100x100 pixels.',
+            'image2.image' => 'Le fichier de l’image 2 doit être une image.',
+            'image2.mimes' => 'L’image 2 doit être au format jpeg, png, jpg, gif, ou svg.',
+            'image2.max' => 'L’image 2 ne doit pas dépasser 2MB.',
+            'image2.dimensions' => 'L’image 2 doit avoir au moins 100x100 pixels.'
         ];
     }
 }

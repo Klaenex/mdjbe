@@ -9,7 +9,7 @@ import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
 import FilesInput from "@/Components/FilesInput";
 
 export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
-    const { data, setData, put, errors, processing } = useForm({
+    const { data, setData, post, errors, processing } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
         location: editMdj.location || "",
@@ -23,7 +23,7 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
         site: editMdj.site || "",
         facebook: editMdj.facebook || "",
         instagram: editMdj.instagram || "",
-        avatar: null, // Ajout d'un champ pour gérer le fichier
+        logo: null, // Ajout d'un champ pour gérer le fichier
     });
 
     const [notification, setNotification] = useState({
@@ -59,8 +59,9 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        put(`/mdjs/${editMdj.id}/edit`, data, {
+        post(`/mdjs/${editMdj.id}/edit`, data, {
             forceFormData: true, // S'assurer d'utiliser FormData pour inclure le fichier
+            _method: "put",
         });
         console.log(data);
     };
@@ -92,8 +93,10 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
                     <FilesInput
                         onFileChange={(file) =>
-                            setData({ ...data, avatar: file })
+                            setData({ ...data, logo: file })
                         }
+                        htmlFor="logo"
+                        label="Logo"
                     />
                     <AdressMdj
                         data={data}

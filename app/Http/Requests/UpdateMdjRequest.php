@@ -39,7 +39,16 @@ class UpdateMdjRequest extends FormRequest
             'email' => 'nullable|string|email:rfc,dns|max:255',
             'site' => 'nullable|string|url',
             'facebook' => 'nullable|string|url',
-            'instagram' => 'nullable|string|url'
+            'instagram' => 'nullable|string|url',
+            'logo' => [
+                'nullable',
+                'file',
+                'image',
+                'mimes:jpeg,png,jpg,gif,svg',
+                'max:2048',
+                'dimensions:min_width=100,min_height=100'
+            ]
+
         ];
     }
 
@@ -48,8 +57,11 @@ class UpdateMdjRequest extends FormRequest
     {
         return [
             'postal_code.regex' => 'Le code postal doit être un numéro à 4 chiffres.',
-            'tel.regex' => 'Le numéro de téléphone doit être un numéro belge valide, commençant par +32 ou 0, suivi d’un chiffre entre 1 et 9, puis de 6 à 10 chiffres supplémentaires.',
-            'email.regex' => "Veuiller entrer un format d'email valide."
+            'tel.regex' => 'Le numéro de téléphone doit être un numéro belge valide, commençant par +32 ou 0, suivi directement par l’indicatif régional et le numéro local.',
+            'logo.image' => 'Le fichier du logo doit être une image.',
+            'logo.mimes' => 'Le logo doit être au format jpeg, png, jpg, gif, ou svg.',
+            'logo.max' => 'Le logo ne doit pas dépasser 2MB.',
+            'logo.dimensions' => 'Le logo doit avoir au moins 100x100 pixels.'
         ];
     }
 }

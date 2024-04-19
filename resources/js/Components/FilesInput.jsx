@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 
-export default function FilesInput({ onFileChange }) {
-    const [preview, setPreview] = useState(null);
+export default function FilesInput({
+    onFileChange,
+    htmlFor,
+    label,
+    existingFileUrl,
+}) {
+    const [preview, setPreview] = useState(existingFileUrl || null);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        if (file && file.type.startsWith("image")) {
+        console.log(event.target.files[0]);
+        if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result);
+                onFileChange(file);
             };
             reader.readAsDataURL(file);
-            onFileChange(file); // Inertia prendra automatiquement ce fichier et le traitera via FormData
         } else {
             setPreview(null);
             onFileChange(null);
@@ -20,7 +26,13 @@ export default function FilesInput({ onFileChange }) {
 
     return (
         <div>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
+            <label htmlFor={htmlFor}>{label}</label>
+            <input
+                id={htmlFor}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+            />
             {preview && (
                 <img
                     src={preview}

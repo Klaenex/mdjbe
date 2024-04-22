@@ -36,9 +36,8 @@ class MdjController extends Controller
 
     public function update(UpdateMdjRequest $request, $id)
     {
-
         $validatedData = $request->validated();
-
+        //    dd($validatedData);
         DB::beginTransaction();
 
         try {
@@ -57,61 +56,52 @@ class MdjController extends Controller
         }
     }
 
+
     protected function handleImageUpload($request, $mdj)
     {
         // Gérer le téléchargement du logo
         if ($request->hasFile('logo')) {
-            $this->uploadAndSaveImage($request->file('logo'), $mdj, true, 'logo');
+            $this->uploadAndSaveImage($request->file('logo'), $mdj, 'logo');
         }
 
-        // Gérer le téléchargement des images supplémentaires
-        $imageFields = ['image1', 'image2'];
-        foreach ($imageFields as $imageField) {
-            if ($request->hasFile($imageField)) {
-                $this->uploadAndSaveImage($request->file($imageField), $mdj, false, $imageField);
-            }
+        // Gérer le téléchargement de l'image1
+        if ($request->hasFile('image1')) {
+            $this->uploadAndSaveImage($request->file('image1'), $mdj, 'image1');
+        }
+
+        // Gérer le téléchargement de l'image2
+        if ($request->hasFile('image2')) {
+            $this->uploadAndSaveImage($request->file('image2'), $mdj, 'image2');
         }
     }
 
-    protected function uploadAndSaveImage($file, $mdj, $isLogo, $fieldName)
+
+
+    protected function uploadAndSaveImage($file, $mdj, $type)
     {
         if ($file->isValid()) {
-            $directory = $isLogo ? 'images/logo' : 'images/photos';
-
-            // Supprimez l'ancien fichier si c'est un logo et qu'un nouveau est téléchargé
-            // if ($isLogo) {
-            //     $oldImage = $mdj->images()->where('logo', true)->first();
-            //     if ($oldImage) {
-            //         Storage::disk('public')->delete($oldImage->path);
-            //         $oldImage->delete();
-            //     }
-            // }
-            $images = Image::where('mdj_id', $mdj->id)->get();
-
-
+            $directory = $type === 'logo' ? 'images/logo' : 'images/photos';
 
             try {
                 // Stockage du nouveau fichier
                 $path = $file->store($directory, 'public');
 
-                // Création d'une nouvelle instance de l'image
+                // Création d'une nouvelle instance de l'image avec le type
                 Image::create([
                     'mdj_id' => $mdj->id,
                     'path' => $path,
                     'name' => $file->getClientOriginalName(),
                     'ext' => $file->extension(),
-                    'logo' => $isLogo,
-                    'desc' => $isLogo ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
+                    'desc' => $type === 'logo' ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
+                    'type' => $type  // Stockez le type ici
                 ]);
             } catch (\Exception $e) {
-                // Enregistrez l'erreur et retournez une réponse avec l'erreur
-                Log::error("Erreur lors de l'upload de l'image {$fieldName}: {$e->getMessage()}");
-                // Retournez l'erreur à l'utilisateur
-                return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$fieldName}: {$e->getMessage()}"]);
+                Log::error("Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}");
+                return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}"]);
             }
         } else {
-            Log::error("Fichier invalide pour le champ {$fieldName}.");
-            return back()->withErrors(['upload' => "Le fichier pour le champ {$fieldName} n'est pas valide."]);
+            Log::error("Fichier invalide pour le champ {$type}.");
+            return back()->withErrors(['upload' => "Le fichier pour le champ {$type} n'est pas valide."]);
         }
     }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function FilesInput({
     onFileChange,
@@ -6,20 +6,27 @@ export default function FilesInput({
     label,
     existingFileUrl,
 }) {
-    const [preview, setPreview] = useState(existingFileUrl || null);
+    // Initialisez la prévisualisation avec l'URL de l'image existante, si disponible
+    const [preview, setPreview] = useState(existingFileUrl);
+
+    useEffect(() => {
+        // Mettre à jour la prévisualisation si l'URL de l'image existante change
+        setPreview(existingFileUrl);
+    }, [existingFileUrl]);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        console.log(event.target.files[0]);
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
+                // Mettez à jour l'aperçu pour le nouveau fichier sélectionné
                 setPreview(reader.result);
                 onFileChange(file);
             };
             reader.readAsDataURL(file);
         } else {
-            setPreview(null);
+            // Réinitialisez la prévisualisation si aucun fichier n'est sélectionné
+            setPreview(existingFileUrl);
             onFileChange(null);
         }
     };
@@ -33,10 +40,11 @@ export default function FilesInput({
                 accept="image/*"
                 onChange={handleFileChange}
             />
+
             {preview && (
                 <img
                     src={preview}
-                    alt="Preview"
+                    alt={`Prévisualisation ${label}`}
                     style={{ maxWidth: "300px", maxHeight: "300px" }}
                 />
             )}

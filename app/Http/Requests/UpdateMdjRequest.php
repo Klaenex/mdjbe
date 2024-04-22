@@ -44,7 +44,7 @@ class UpdateMdjRequest extends FormRequest
                 'nullable',
                 'file',
                 'image',
-                'mimes:jpeg,png,jpg,gif,svg',
+                'mimes:jpeg,png,jpg,gif,svg,webp',
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
             ],
@@ -52,7 +52,7 @@ class UpdateMdjRequest extends FormRequest
                 'nullable',
                 'file',
                 'image',
-                'mimes:jpeg,png,jpg,gif,svg',
+                'mimes:jpeg,png,jpg,svg,webp',
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
             ],
@@ -60,7 +60,7 @@ class UpdateMdjRequest extends FormRequest
                 'nullable',
                 'file',
                 'image',
-                'mimes:jpeg,png,jpg,gif,svg',
+                'mimes:jpeg,png,jpg,svg,webp',
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
             ]

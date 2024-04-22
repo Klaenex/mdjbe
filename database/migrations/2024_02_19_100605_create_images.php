@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
-            $table->boolean('logo')->default(false);
+            $table->string('type');
             $table->string('desc')->nullable();
             $table->string('ext');
             $table->unsignedBigInteger('mdj_id');

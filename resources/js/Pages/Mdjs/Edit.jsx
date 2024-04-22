@@ -8,7 +8,12 @@ import Notification from "@/Components/Notification";
 import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
 import FilesInput from "@/Components/FilesInput";
 
-export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
+export default function EditMdj({
+    auth,
+    editMdj,
+    dispositifsParticulier,
+    img,
+}) {
     const { data, setData, post, errors, processing } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
@@ -65,7 +70,6 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
             forceFormData: true, // S'assurer d'utiliser FormData pour inclure le fichier
             _method: "put",
         });
-        console.log(data);
     };
 
     return (
@@ -94,30 +98,56 @@ export default function EditMdj({ auth, editMdj, dispositifsParticulier }) {
                 >
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
                     <FilesInput
+                        htmlFor="logo"
+                        label="Logo"
+                        existingFileUrl={
+                            img && img.find((i) => i.type === "logo")
+                                ? `/storage/${
+                                      img.find((i) => i.type === "logo").path
+                                  }`
+                                : null
+                        }
                         onFileChange={(file) =>
                             setData({ ...data, logo: file })
                         }
-                        htmlFor="logo"
-                        label="Logo"
+                        img={img}
                     />
                     <FilesInput
+                        htmlFor="image1"
+                        label="Image 1"
+                        existingFileUrl={
+                            img && img.find((i) => i.type === "image1")
+                                ? `/storage/${
+                                      img.find((i) => i.type === "image1").path
+                                  }`
+                                : null
+                        }
                         onFileChange={(file) =>
                             setData({ ...data, image1: file })
                         }
-                        htmlFor="image1"
-                        label="Image 1"
+                        img={img}
                     />
+
                     <FilesInput
+                        htmlFor="image2"
+                        label="Image 2"
+                        existingFileUrl={
+                            img && img.find((i) => i.type === "image2")
+                                ? `/storage/${
+                                      img.find((i) => i.type === "image2").path
+                                  }`
+                                : null
+                        }
                         onFileChange={(file) =>
                             setData({ ...data, image2: file })
                         }
-                        htmlFor="image2"
-                        label="Image 2"
+                        img={img}
                     />
                     <AdressMdj
                         data={data}
                         onChange={onChange}
                         errors={errors}
+                        img={img}
                     />
                     <NetworksMdj
                         data={data}

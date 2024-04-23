@@ -29,7 +29,7 @@ class MdjController extends Controller
 
         return Inertia::render('Mdjs/Edit', [
             'editMdj' => $mdj,
-            'dispositifsParticulier' => DispositifParticulier::all(),
+            'dp' => DispositifParticulier::all(),
             'img' => $images,
         ]);
     }
@@ -93,7 +93,7 @@ class MdjController extends Controller
                     'name' => $file->getClientOriginalName(),
                     'ext' => $file->extension(),
                     'desc' => $type === 'logo' ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
-                    'type' => $type  // Stockez le type ici
+                    'type' => $type
                 ]);
             } catch (\Exception $e) {
                 Log::error("Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}");

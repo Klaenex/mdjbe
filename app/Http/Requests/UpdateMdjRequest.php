@@ -63,7 +63,8 @@ class UpdateMdjRequest extends FormRequest
                 'mimes:jpeg,png,jpg,svg,webp',
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
-            ]
+            ],
+            'dispositif_particulier' => 'nullable|string'
         ];
     }
 

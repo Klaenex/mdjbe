@@ -7,13 +7,9 @@ import AdressMdj from "@/Components/partFormMdjs/AdressMdj";
 import Notification from "@/Components/Notification";
 import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
 import FilesInput from "@/Components/FilesInput";
+import DpMdj from "@/Components/partFormMdjs/DpMdj";
 
-export default function EditMdj({
-    auth,
-    editMdj,
-    dispositifsParticulier,
-    img,
-}) {
+export default function EditMdj({ auth, editMdj, dp, img }) {
     const { data, setData, post, errors, processing } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
@@ -31,6 +27,7 @@ export default function EditMdj({
         logo: null,
         image1: null,
         image2: null,
+        dispositif_particulier: editMdj.dispositif_particulier || "",
     });
 
     const [notification, setNotification] = useState({
@@ -57,10 +54,11 @@ export default function EditMdj({
     }, [auth.flash, errors]);
 
     const onChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setData((data) => ({
-            ...data,
-            [name]: type === "checkbox" ? checked : value,
+        const { name, value } = e.target;
+        console.log("Change detected:", name, value); // Ajoutez ceci pour le debug
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value === "none" ? "" : value,
         }));
     };
 
@@ -70,6 +68,7 @@ export default function EditMdj({
             forceFormData: true, // S'assurer d'utiliser FormData pour inclure le fichier
             _method: "put",
         });
+        console.log(data);
     };
 
     return (
@@ -97,6 +96,11 @@ export default function EditMdj({
                     encType="multipart/form-data"
                 >
                     <BaseMdj data={data} onChange={onChange} errors={errors} />
+                    <DpMdj
+                        dp={dp}
+                        selectedDispositif={editMdj.dispositif_particulier}
+                        onChange={onChange}
+                    />
                     <FilesInput
                         htmlFor="logo"
                         label="Logo"

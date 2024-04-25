@@ -64,7 +64,9 @@ class UpdateMdjRequest extends FormRequest
                 'max:2048',
                 'dimensions:min_width=100,min_height=100'
             ],
-            'dispositif_particulier' => 'nullable|string'
+            'dispositif_particulier' => 'nullable|string',
+            'projects.*.id' => 'sometimes|exists:projet_porteur,id',
+            'projects.*.name' => 'required|string|max:255',
         ];
     }
 
@@ -85,7 +87,11 @@ class UpdateMdjRequest extends FormRequest
             'image2.image' => 'Le fichier de l’image 2 doit être une image.',
             'image2.mimes' => 'L’image 2 doit être au format jpeg, png, jpg, gif, ou svg.',
             'image2.max' => 'L’image 2 ne doit pas dépasser 2MB.',
-            'image2.dimensions' => 'L’image 2 doit avoir au moins 100x100 pixels.'
+            'image2.dimensions' => 'L’image 2 doit avoir au moins 100x100 pixels.',
+            'projects.*.id.exists' => 'Le projet spécifié n’existe pas.',
+            'projects.*.name.required' => 'Le nom du projet est obligatoire.',
+            'projects.*.name.string' => 'Le nom du projet doit être une chaîne de caractères.',
+            'projects.*.name.max' => 'Le nom du projet ne peut pas dépasser 255 caractères.',
         ];
     }
 }

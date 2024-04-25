@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Mdjs;
 use App\Models\DispositifParticulier;
 use App\Models\Image;
+use App\Models\ProjetPorteur;
 use App\Http\Requests\UpdateMdjRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,12 +26,14 @@ class MdjController extends Controller
     public function edit($id)
     {
         $mdj = Mdjs::findOrFail($id);
-        $images = Image::where('mdj_id', $id)->get(); // Assurez-vous que la requête est exécutée
-
+        $images = Image::where('mdj_id', $id)->get();
+        $dp = DispositifParticulier::all();
+        $projetPorteur = ProjetPorteur::where('mdj_id', $id)->orderBy('id', 'desc')->get();
         return Inertia::render('Mdjs/Edit', [
             'editMdj' => $mdj,
-            'dp' => DispositifParticulier::all(),
+            'dp' => $dp,
             'img' => $images,
+            'projetPorteur' => $projetPorteur
         ]);
     }
 
@@ -43,9 +46,8 @@ class MdjController extends Controller
         try {
             $mdj = Mdjs::findOrFail($id);
             $mdj->update($validatedData);
-
             $this->handleImageUpload($request, $mdj);
-
+            $this->handleProjects($request->projects ?? [], $mdj);
             DB::commit();
             return redirect()->route('mdjs.edit', $mdj->id)
                 ->with('success', 'La maison de jeunes a été mise à jour avec succès.');

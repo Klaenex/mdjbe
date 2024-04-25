@@ -9,7 +9,11 @@ import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
 import FilesInput from "@/Components/FilesInput";
 import DpMdj from "@/Components/partFormMdjs/DpMdj";
 
-export default function EditMdj({ auth, editMdj, dp, img }) {
+import Modal from "@/Components/Modal";
+import ProjetMdj from "@/Components/partFormMdjs/ProjetMdj";
+
+export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
+    // FORM DATA
     const { data, setData, post, errors, processing } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
@@ -28,8 +32,10 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
         image1: null,
         image2: null,
         dispositif_particulier: editMdj.dispositif_particulier || "",
+        projects: [],
     });
-
+    console.log(projetPorteur);
+    //NOTIFICATION
     const [notification, setNotification] = useState({
         show: false,
         message: "",
@@ -53,9 +59,9 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
         }
     }, [auth.flash, errors]);
 
+    // FORM LOGIC
     const onChange = (e) => {
         const { name, value } = e.target;
-        console.log("Change detected:", name, value); // Ajoutez ceci pour le debug
         setData((prevData) => ({
             ...prevData,
             [name]: value === "none" ? "" : value,
@@ -64,11 +70,27 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post(`/mdjs/${editMdj.id}/edit`, data, {
-            forceFormData: true, // S'assurer d'utiliser FormData pour inclure le fichier
-            _method: "put",
-        });
+        // post(`/mdjs/${editMdj.id}/edit`, data, {
+        //     forceFormData: true,
+        //     _method: "put",
+        // });
         console.log(data);
+    };
+
+    //MODAL
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpen = () => setIsModalOpen(true);
+    const handleClose = () => setIsModalOpen(false);
+
+    //PROJET PORTEUR
+
+    const addProject = (projectName) => {
+        setData((data) => ({
+            ...data,
+            projects: Array.isArray(data.projects)
+                ? [...data.projects, { name: projectName }]
+                : [{ name: projectName }],
+        }));
     };
 
     return (
@@ -101,6 +123,34 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
                         selectedDispositif={editMdj.dispositif_particulier}
                         onChange={onChange}
                     />
+                    <div className="text-white">
+                        <h3>Projet porteur</h3>
+                        <Modal show={isModalOpen} onClose={handleClose}>
+                            <ProjetMdj
+                                handleClose={handleClose}
+                                addProject={addProject}
+                            />
+                        </Modal>
+                        <ul className="mt-4 space-y-2">
+                            {data.projects &&
+                                data.projects.map((newProjet, index) => (
+                                    <li className="text-green-300" key={index}>
+                                        {newProjet.name}
+                                    </li>
+                                ))}
+                            {projetPorteur &&
+                                projetPorteur.map((projet, index) => (
+                                    <li key={index}>{projet.name}</li>
+                                ))}
+                        </ul>
+                        <button
+                            type="button"
+                            onClick={handleOpen}
+                            className="mt-3 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-50 transition duration-150 ease-in-out"
+                        >
+                            Ajouter un Projet Porteur
+                        </button>
+                    </div>
                     <FilesInput
                         htmlFor="logo"
                         label="Logo"
@@ -115,6 +165,7 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
                             setData({ ...data, logo: file })
                         }
                         img={img}
+                        className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     />
                     <FilesInput
                         htmlFor="image1"
@@ -130,6 +181,7 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
                             setData({ ...data, image1: file })
                         }
                         img={img}
+                        className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     />
 
                     <FilesInput
@@ -146,6 +198,7 @@ export default function EditMdj({ auth, editMdj, dp, img }) {
                             setData({ ...data, image2: file })
                         }
                         img={img}
+                        className="block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                     />
                     <AdressMdj
                         data={data}

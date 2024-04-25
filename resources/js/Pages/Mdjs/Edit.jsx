@@ -70,10 +70,10 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // post(`/mdjs/${editMdj.id}/edit`, data, {
-        //     forceFormData: true,
-        //     _method: "put",
-        // });
+        post(`/mdjs/${editMdj.id}/edit`, data, {
+            forceFormData: true,
+            _method: "put",
+        });
         console.log(data);
     };
 

@@ -40,14 +40,14 @@ class MdjController extends Controller
     public function update(UpdateMdjRequest $request, $id)
     {
         $validatedData = $request->validated();
-        //    dd($validatedData);
+        dd($request->projects);
         DB::beginTransaction();
 
         try {
             $mdj = Mdjs::findOrFail($id);
             $mdj->update($validatedData);
             $this->handleImageUpload($request, $mdj);
-            $this->handleProjects($request->projects ?? [], $mdj);
+            $this->handleProjects($request->projects, $mdj);
             DB::commit();
             return redirect()->route('mdjs.edit', $mdj->id)
                 ->with('success', 'La maison de jeunes a été mise à jour avec succès.');

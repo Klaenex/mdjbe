@@ -40,14 +40,19 @@ class MdjController extends Controller
     public function update(UpdateMdjRequest $request, $id)
     {
         $validatedData = $request->validated();
-        dd($request->projects);
+
         DB::beginTransaction();
 
         try {
             $mdj = Mdjs::findOrFail($id);
             $mdj->update($validatedData);
+
             $this->handleImageUpload($request, $mdj);
-            $this->handleProjects($request->projects, $mdj);
+
+            if ($request->has('projects')) {
+                $this->handleProjects($request->projects, $mdj);
+            }
+
             DB::commit();
             return redirect()->route('mdjs.edit', $mdj->id)
                 ->with('success', 'La maison de jeunes a été mise à jour avec succès.');
@@ -81,6 +86,7 @@ class MdjController extends Controller
 
     protected function uploadAndSaveImage($file, $mdj, $type)
     {
+
         if ($file->isValid()) {
             $directory = $type === 'logo' ? 'images/logo' : 'images/photos';
 
@@ -98,12 +104,29 @@ class MdjController extends Controller
                     'type' => $type
                 ]);
             } catch (\Exception $e) {
+
                 Log::error("Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}");
                 return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}"]);
             }
         } else {
             Log::error("Fichier invalide pour le champ {$type}.");
             return back()->withErrors(['upload' => "Le fichier pour le champ {$type} n'est pas valide."]);
+        }
+    }
+
+
+    protected function handleProjects($projects, $mdj)
+    {
+        foreach ($projects as $project) {
+            try {
+                ProjetPorteur::create([
+                    'mdj_id' => $mdj->id,  // Assurez-vous que cette valeur est bien passée
+                    'name' => $project['name']
+                ]);
+            } catch (\Exception $e) {
+                Log::error("Erreur lors de la création d'un projet porteur: {$e->getMessage()}");
+                // Ajouter une gestion d'erreur appropriée
+            }
         }
     }
 }

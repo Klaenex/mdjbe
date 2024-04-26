@@ -12,7 +12,7 @@ class ProjetPorteur extends Model
     protected $table = 'projet_porteur';
 
     protected $fillable = [
-        'name',
+        'name', 'mdj_id'
 
     ];
     public function mdjs()

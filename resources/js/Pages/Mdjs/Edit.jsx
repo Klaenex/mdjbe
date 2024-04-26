@@ -14,7 +14,7 @@ import ProjetMdj from "@/Components/partFormMdjs/ProjetMdj";
 
 export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
     // FORM DATA
-    const { data, setData, post, errors, processing } = useForm({
+    const { data, setData, post, errors, processing, progress } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
         location: editMdj.location || "",
@@ -34,7 +34,6 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
         dispositif_particulier: editMdj.dispositif_particulier || "",
         projects: [],
     });
-    console.log(projetPorteur);
     //NOTIFICATION
     const [notification, setNotification] = useState({
         show: false,
@@ -70,11 +69,13 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Envoyer les données via POST
         post(`/mdjs/${editMdj.id}/edit`, data, {
             forceFormData: true,
             _method: "put",
         });
-        console.log(data);
+        setData((prev) => ({ ...prev, projects: [] }));
     };
 
     //MODAL
@@ -216,6 +217,11 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                             Modifier la maison de jeune
                         </PrimaryButton>
                     </div>
+                    {progress && (
+                        <progress value={progress.percentage} max="100">
+                            {progress.percentage}%
+                        </progress>
+                    )}
                 </form>
             </section>
         </AuthenticatedLayout>

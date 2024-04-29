@@ -61,7 +61,7 @@ class UpdateMdjRequest extends FormRequest
                 'file',
                 'image',
                 'mimes:jpeg,png,jpg,svg,webp',
-                'max:2048',
+                'max:4096',
                 'dimensions:min_width=100,min_height=100'
             ],
             'dispositif_particulier' => 'nullable|string',
@@ -78,7 +78,7 @@ class UpdateMdjRequest extends FormRequest
             'tel.regex' => 'Le numéro de téléphone doit être un numéro belge valide, commençant par +32 ou 0, suivi directement par l’indicatif régional et le numéro local.',
             'logo.image' => 'Le fichier du logo doit être une image.',
             'logo.mimes' => 'Le logo doit être au format jpeg, png, jpg, gif, ou svg.',
-            'logo.max' => 'Le logo ne doit pas dépasser 2MB.',
+            'logo.max' => 'Le logo ne doit pas dépasser 4MB.',
             'logo.dimensions' => 'Le logo doit avoir au moins 100x100 pixels.',
             'image1.image' => 'Le fichier de l’image 1 doit être une image.',
             'image1.mimes' => 'L’image 1 doit être au format jpeg, png, jpg, gif, ou svg.',

@@ -76,6 +76,7 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
             _method: "put",
         });
         setData((prev) => ({ ...prev, projects: [] }));
+        console.log(data);
     };
 
     //MODAL
@@ -92,6 +93,19 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                 ? [...data.projects, { name: projectName }]
                 : [{ name: projectName }],
         }));
+    };
+    const removeProject = (projectId) => {
+        if (confirm("Are you sure you want to delete this project?")) {
+            fetch(`/mdjs/${projectId}/delete`, { method: "DELETE" })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Project deleted:", data);
+                    // Redirect or update UI as needed
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
     };
 
     return (
@@ -140,8 +154,19 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                                     </li>
                                 ))}
                             {projetPorteur &&
-                                projetPorteur.map((projet, index) => (
-                                    <li key={index}>{projet.name}</li>
+                                projetPorteur.map((projet) => (
+                                    <>
+                                        <li key={projet.id}>{projet.name}</li>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                removeProject(projet.id)
+                                            }
+                                            className="ml-4 px-2 py-1 bg-red-500 text-white rounded hover:bg-red-700 transition duration-150 ease-in-out"
+                                        >
+                                            Supprimer
+                                        </button>
+                                    </>
                                 ))}
                         </ul>
                         <button

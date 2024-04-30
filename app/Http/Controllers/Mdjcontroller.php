@@ -39,6 +39,8 @@ class MdjController extends Controller
 
     public function update(UpdateMdjRequest $request, $id)
     {
+        Log::info('Mise à jour Mdj - données reçues', ['data' => $request->all()]);
+
         $validatedData = $request->validated();
 
         DB::beginTransaction();
@@ -58,56 +60,44 @@ class MdjController extends Controller
                 ->with('success', 'La maison de jeunes a été mise à jour avec succès.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error("Erreur lors de la mise à jour de la Mdj: {$e->getMessage()}");
-            return back()->withErrors(['error' => 'Une erreur est survenue lors de la mise à jour.']);
+            Log::error("Erreur lors de la mise à jour de la Mdj: {$e->getMessage()}", ['exception' => $e]);
+            return back()->withErrors($request->errors())->withInput();
         }
     }
 
 
     protected function handleImageUpload($request, $mdj)
     {
-        // Gérer le téléchargement du logo
-        if ($request->hasFile('logo')) {
-            $this->uploadAndSaveImage($request->file('logo'), $mdj, 'logo');
-        }
+        $types = ['logo', 'image1', 'image2'];
 
-        // Gérer le téléchargement de l'image1
-        if ($request->hasFile('image1')) {
-            $this->uploadAndSaveImage($request->file('image1'), $mdj, 'image1');
-        }
-
-        // Gérer le téléchargement de l'image2
-        if ($request->hasFile('image2')) {
-            $this->uploadAndSaveImage($request->file('image2'), $mdj, 'image2');
+        foreach ($types as $type) {
+            if ($request->hasFile($type)) {
+                $this->uploadAndReplaceImage($request->file($type), $mdj, $type);
+            }
         }
     }
 
-
-
-    protected function uploadAndSaveImage($file, $mdj, $type)
+    protected function uploadAndReplaceImage($file, $mdj, $type)
     {
-
         if ($file->isValid()) {
-            $directory = $type === 'logo' ? 'images/logo' : 'images/photos';
+            $existingImage = Image::where('mdj_id', $mdj->id)->where('type', $type)->first();
 
-            try {
-                // Stockage du nouveau fichier
-                $path = $file->store($directory, 'public');
-
-                // Création d'une nouvelle instance de l'image avec le type
-                Image::create([
-                    'mdj_id' => $mdj->id,
-                    'path' => $path,
-                    'name' => $file->getClientOriginalName(),
-                    'ext' => $file->extension(),
-                    'desc' => $type === 'logo' ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
-                    'type' => $type
-                ]);
-            } catch (\Exception $e) {
-
-                Log::error("Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}");
-                return back()->withErrors(['upload' => "Erreur lors de l'upload de l'image {$type}: {$e->getMessage()}"]);
+            if ($existingImage) {
+                Storage::disk('public')->delete($existingImage->path);
+                $existingImage->delete();
             }
+
+            $directory = $type === 'logo' ? 'images/logo' : 'images/photos';
+            $path = $file->store($directory, 'public');
+
+            Image::create([
+                'mdj_id' => $mdj->id,
+                'path' => $path,
+                'name' => $file->getClientOriginalName(),
+                'ext' => $file->extension(),
+                'desc' => $type === 'logo' ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
+                'type' => $type
+            ]);
         } else {
             Log::error("Fichier invalide pour le champ {$type}.");
             return back()->withErrors(['upload' => "Le fichier pour le champ {$type} n'est pas valide."]);
@@ -127,6 +117,19 @@ class MdjController extends Controller
                 Log::error("Erreur lors de la création d'un projet porteur: {$e->getMessage()}");
                 // Ajouter une gestion d'erreur appropriée
             }
+        }
+    }
+
+    public function deleteProject($id)
+    {
+
+        $project = ProjetPorteur::find($id);
+        dd($project);
+        if ($project) {
+            $project->delete();
+            return response()->json(['success' => 'Project deleted successfully']);
+        } else {
+            return response()->json(['error' => 'Project not found'], 404);
         }
     }
 }

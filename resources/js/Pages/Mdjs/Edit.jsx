@@ -95,17 +95,7 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
         }));
     };
     const removeProject = (projectId) => {
-        if (confirm("Are you sure you want to delete this project?")) {
-            fetch(`/mdjs/${projectId}/delete`, { method: "DELETE" })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log("Project deleted:", data);
-                    // Redirect or update UI as needed
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
-        }
+        alert(projectId);
     };
 
     return (

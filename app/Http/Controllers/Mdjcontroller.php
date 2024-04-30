@@ -122,14 +122,11 @@ class MdjController extends Controller
 
     public function deleteProject($id)
     {
-
         $project = ProjetPorteur::find($id);
-        dd($project);
+
         if ($project) {
             $project->delete();
-            return response()->json(['success' => 'Project deleted successfully']);
-        } else {
-            return response()->json(['error' => 'Project not found'], 404);
+            return response()->json(['success' => 'Le projet a bien été supprimer']);
         }
     }
 }

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Head, useForm } from "@inertiajs/react";
+import { useState, useEffect, Fragment } from "react";
+import { Head, useForm, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import PrimaryButton from "@/Components/PrimaryButton";
 import BaseMdj from "@/Components/partFormMdjs/BaseMdj";
@@ -94,8 +94,51 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                 : [{ name: projectName }],
         }));
     };
-    const removeProject = (projectId) => {
-        alert(projectId);
+    const removeProject = async (projectId) => {
+        try {
+            const response = await fetch(`/mdjs/project/${projectId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content"), // Assurez-vous que le token CSRF est inclus si nécessaire
+                },
+            });
+
+            if (response.ok) {
+                // Suppression réussie, mettez à jour les projets localement
+                setData((prev) => ({
+                    ...prev,
+                    projects: prev.projects.filter(
+                        (project) => project.id !== projectId
+                    ),
+                    projetPorteur: projetPorteur.filter(
+                        (projet) => projet.id !== projectId
+                    ),
+                }));
+                setNotification({
+                    show: true,
+                    message: "Projet supprimé avec succès.",
+                    type: "success",
+                });
+            } else {
+                const errorData = await response.json();
+                setNotification({
+                    show: true,
+                    message: `Erreur lors de la suppression du projet : ${
+                        errorData.message || "Erreur serveur"
+                    }`,
+                    type: "error",
+                });
+            }
+        } catch (error) {
+            setNotification({
+                show: true,
+                message: `Erreur lors de la suppression du projet : ${error.message}`,
+                type: "error",
+            });
+        }
     };
 
     return (
@@ -144,9 +187,9 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                                     </li>
                                 ))}
                             {projetPorteur &&
-                                projetPorteur.map((projet) => (
-                                    <>
-                                        <li key={projet.id}>{projet.name}</li>
+                                projetPorteur.map((projet, index) => (
+                                    <Fragment key={index}>
+                                        <li data={projet.id}>{projet.name}</li>
                                         <button
                                             type="button"
                                             onClick={() =>
@@ -156,7 +199,7 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                                         >
                                             Supprimer
                                         </button>
-                                    </>
+                                    </Fragment>
                                 ))}
                         </ul>
                         <button

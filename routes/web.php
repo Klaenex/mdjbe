@@ -63,6 +63,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/mdjs', [MdjController::class, 'index'])->name('mdjs.index');
     Route::get('/mdjs/{mdj}/edit', [MdjController::class, 'edit'])->name('mdjs.edit');
     Route::post('/mdjs/{mdj}/edit', [MdjController::class, 'update'])->name('mdjs.update');
+
+    Route::delete('/mdjs/project/{id}', [MdjController::class, 'deleteProject'])->name('project.delete');
 });
 
 

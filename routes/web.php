@@ -2,26 +2,11 @@
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-use Illuminate\Support\Facades\Auth;
-
-
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MdjController;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -30,14 +15,11 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 Route::get('/inscription/{userId}/{token}', function ($userId, $token) {
     return Inertia::render('Register', ['userId' => $userId, 'token' => $token]);
 })->name('register');
+
 Route::put('/inscription', [RegisteredUserController::class, 'update'])->name('register.update');
-
-
-
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -57,15 +39,10 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::put('/users/{user}/edit', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
-
-
-
     Route::get('/mdjs', [MdjController::class, 'index'])->name('mdjs.index');
     Route::get('/mdjs/{mdj}/edit', [MdjController::class, 'edit'])->name('mdjs.edit');
     Route::post('/mdjs/{mdj}/edit', [MdjController::class, 'update'])->name('mdjs.update');
-
     Route::delete('/mdjs/project/{id}', [MdjController::class, 'deleteProject'])->name('project.delete');
 });
-
 
 require __DIR__ . '/auth.php';

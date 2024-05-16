@@ -8,13 +8,19 @@ import Notification from "@/Components/Notification";
 import NetworksMdj from "@/Components/partFormMdjs/NetworksMdj";
 import FilesInput from "@/Components/FilesInput";
 import DpMdj from "@/Components/partFormMdjs/DpMdj";
-
 import Modal from "@/Components/Modal";
 import ProjetMdj from "@/Components/partFormMdjs/ProjetMdj";
 
 export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
-    // FORM DATA
-    const { data, setData, post, errors, processing, progress } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        errors,
+        processing,
+        progress,
+        delete: destroy,
+    } = useForm({
         name: editMdj.name || "",
         tagline: editMdj.tagline || "",
         location: editMdj.location || "",
@@ -31,15 +37,16 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
         logo: null,
         image1: null,
         image2: null,
-        dispositif_particulier: editMdj.dispositif_particulier || "",
+        dispositif_particulier: editMdj.dispositif_particulier || 0,
         projects: [],
     });
-    //NOTIFICATION
+    console.log(data);
     const [notification, setNotification] = useState({
         show: false,
         message: "",
         type: "success",
     });
+
     useEffect(() => {
         const messageType = auth.flash.success ? "success" : "error";
         const messageContent =
@@ -58,7 +65,6 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
         }
     }, [auth.flash, errors]);
 
-    // FORM LOGIC
     const onChange = (e) => {
         const { name, value } = e.target;
         setData((prevData) => ({
@@ -69,22 +75,16 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Envoyer les données via POST
         post(`/mdjs/${editMdj.id}/edit`, data, {
             forceFormData: true,
             _method: "put",
         });
         setData((prev) => ({ ...prev, projects: [] }));
-        console.log(data);
     };
 
-    //MODAL
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleOpen = () => setIsModalOpen(true);
     const handleClose = () => setIsModalOpen(false);
-
-    //PROJET PORTEUR
 
     const addProject = (projectName) => {
         setData((data) => ({
@@ -94,51 +94,25 @@ export default function EditMdj({ auth, editMdj, dp, img, projetPorteur }) {
                 : [{ name: projectName }],
         }));
     };
-    const removeProject = async (projectId) => {
-        try {
-            const response = await fetch(`/mdjs/project/${projectId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-Token": document
-                        .querySelector('meta[name="csrf-token"]')
-                        .getAttribute("content"), // Assurez-vous que le token CSRF est inclus si nécessaire
-                },
-            });
 
-            if (response.ok) {
-                // Suppression réussie, mettez à jour les projets localement
-                setData((prev) => ({
-                    ...prev,
-                    projects: prev.projects.filter(
-                        (project) => project.id !== projectId
-                    ),
-                    projetPorteur: projetPorteur.filter(
-                        (projet) => projet.id !== projectId
-                    ),
-                }));
-                setNotification({
-                    show: true,
-                    message: "Projet supprimé avec succès.",
-                    type: "success",
-                });
-            } else {
-                const errorData = await response.json();
+    const removeProject = (projectId) => {
+        destroy(`/mdjs/project/${projectId}`, {
+            onSuccess: () => {
+                setData(
+                    "projects",
+                    data.projects.filter((project) => project.id !== projectId)
+                );
+            },
+            onError: (error) => {
                 setNotification({
                     show: true,
                     message: `Erreur lors de la suppression du projet : ${
-                        errorData.message || "Erreur serveur"
+                        error.message || "Erreur serveur"
                     }`,
                     type: "error",
                 });
-            }
-        } catch (error) {
-            setNotification({
-                show: true,
-                message: `Erreur lors de la suppression du projet : ${error.message}`,
-                type: "error",
-            });
-        }
+            },
+        });
     };
 
     return (

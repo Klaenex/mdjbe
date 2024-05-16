@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { router, Head } from "@inertiajs/react";
-
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
-
 import PrimaryButton from "@/Components/PrimaryButton";
 import Notification from "@/Components/Notification";
-export default function CreateUser({ auth, errors }) {
+import MdjExist from "@/Components/partFormUsers/MdjExist";
+
+export default function CreateUser({ auth, errors, mdjs }) {
     const [notification, setNotification] = useState({
         show: false,
         message: "",
         type: "success",
     });
+
     useEffect(() => {
         if (auth.flash.success) {
             setNotification({
@@ -27,6 +28,7 @@ export default function CreateUser({ auth, errors }) {
             });
         }
     }, [auth.flash.success, auth.flash.error]);
+
     useEffect(() => {
         if (errors.email) {
             setNotification({
@@ -42,7 +44,10 @@ export default function CreateUser({ auth, errors }) {
         email: "",
         mj: "",
         is_admin: 0,
+        mdjExist: false,
+        mjExist: "",
     });
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({
@@ -53,8 +58,7 @@ export default function CreateUser({ auth, errors }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(formData);
-        router.post("create", formData);
+        router.post("/users/create", formData);
     };
 
     return (
@@ -99,17 +103,20 @@ export default function CreateUser({ auth, errors }) {
                             required
                         />
                     </div>
-                    <div className="text-white mt-4">
-                        <label htmlFor="mj">Nom de la Mj</label>
-                        <TextInput
-                            name="mj"
-                            type="text"
-                            value={formData.mj}
-                            className="mt-1 block w-full"
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                    <MdjExist mdjs={mdjs} onChange={handleChange} />
+                    {!formData.mdjExist && (
+                        <div className="text-white mt-4">
+                            <label htmlFor="mj">Nom de la Mj</label>
+                            <TextInput
+                                name="mj"
+                                type="text"
+                                value={formData.mj}
+                                className="mt-1 block w-full"
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    )}
                     <div className="mt-4">
                         <label className="flex items-center">
                             <input

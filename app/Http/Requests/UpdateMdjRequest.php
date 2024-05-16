@@ -64,7 +64,7 @@ class UpdateMdjRequest extends FormRequest
                 'max:4096',
                 'dimensions:min_width=100,min_height=100'
             ],
-            'dispositif_particulier' => 'nullable|string',
+            'dispositif_particulier' => 'nullable|numeric',
             'projects.*.id' => 'sometimes|exists:projet_porteur,id',
             'projects.*.name' => 'required|string|max:255',
         ];

@@ -8,6 +8,7 @@ use App\Models\Mdjs;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\CreateUserRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
@@ -26,8 +27,10 @@ class UserController extends Controller
 
     public function create()
     {
+        $mdj = Mdjs::all();
         return Inertia::render('Users/Create', [
             'user' => auth()->user(),
+            'mdjs' => $mdj
         ]);
     }
 
@@ -36,7 +39,7 @@ class UserController extends Controller
         // Validation des données entrantes
         $validatedData = $request->validated();
 
-        \DB::beginTransaction(); // Début de la transaction
+        DB::beginTransaction(); // Début de la transaction
         try {
             $password = Str::random(10);
             // Création de l'utilisateur
@@ -56,15 +59,15 @@ class UserController extends Controller
             // $token = Password::broker()->createToken($user);
             // Mail::to($user->email)->send(new Welcome($token, $user->id));
 
-            \DB::commit(); // Validation de la transaction
+            DB::commit(); // Validation de la transaction
 
             return redirect()->route('users.index')->with('success', 'Utilisateur créé et email envoyé avec succès.');
         } catch (\Illuminate\Database\QueryException $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             return back()->with('error', 'Erreur de base de données lors de la création de l\'utilisateur.');
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             return back()->with('error', 'Erreur lors de la création de l\'utilisateur.');
         }

@@ -48,7 +48,6 @@ class MdjController extends Controller
         try {
             $mdj = Mdjs::findOrFail($id);
             $mdj->update($validatedData);
-
             $this->handleImageUpload($request, $mdj);
 
             if ($request->has('projects')) {
@@ -122,11 +121,13 @@ class MdjController extends Controller
 
     public function deleteProject($id)
     {
-        $project = ProjetPorteur::find($id);
-        dd($project);
-        if ($project) {
+        try {
+            $project = ProjetPorteur::findOrFail($id);
             $project->delete();
-            return response()->json(['success' => 'Le projet a bien été supprimer']);
+            return redirect()->back()->with('success', 'Le projet a bien été supprimé');
+        } catch (\Exception $e) {
+            Log::error("Erreur lors de la suppression du projet porteur: {$e->getMessage()}", ['exception' => $e]);
+            return redirect()->back()->with('error', 'Erreur lors de la suppression du projet');
         }
     }
 }

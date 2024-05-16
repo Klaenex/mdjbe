@@ -18,7 +18,7 @@ export default function MdjExist({ mdjs, onChange }) {
                     checked={isMdjExist}
                     onChange={handleCheckboxChange}
                 />
-                <span className="ml-2 text-sm">
+                <span className="ml-2">
                     Attribuer l'utilisateur à une maison de jeunes existante
                 </span>
             </label>

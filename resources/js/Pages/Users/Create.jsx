@@ -45,7 +45,7 @@ export default function CreateUser({ auth, errors, mdjs }) {
         mj: "",
         is_admin: 0,
         mdjExist: false,
-        mjExist: "",
+        mjExist: 0,
     });
 
     const handleChange = (e) => {
@@ -58,7 +58,8 @@ export default function CreateUser({ auth, errors, mdjs }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.post("/users/create", formData);
+        console.log(formData);
+        // router.post("/users/create", formData);
     };
 
     return (
@@ -91,6 +92,7 @@ export default function CreateUser({ auth, errors, mdjs }) {
                             onChange={handleChange}
                             required
                         />
+                        {errors.name && <div>{errors.name}</div>}
                     </div>
                     <div className="text-white mt-4">
                         <label htmlFor="email">Email</label>
@@ -102,6 +104,7 @@ export default function CreateUser({ auth, errors, mdjs }) {
                             onChange={handleChange}
                             required
                         />
+                        {errors.email && <div>{errors.email}</div>}
                     </div>
                     <MdjExist mdjs={mdjs} onChange={handleChange} />
                     {!formData.mdjExist && (
@@ -115,6 +118,7 @@ export default function CreateUser({ auth, errors, mdjs }) {
                                 onChange={handleChange}
                                 required
                             />
+                            {errors.mj && <div>{errors.mj}</div>}
                         </div>
                     )}
                     <div className="mt-4">

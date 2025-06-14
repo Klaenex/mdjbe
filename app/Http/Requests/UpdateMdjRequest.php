@@ -36,7 +36,7 @@ class UpdateMdjRequest extends FormRequest
                 'regex:/\d{1,2}/',  // 1 ou 2 chiffres pour l'indicatif régional
                 'regex:/\d{3}\s?\/?\s?\d{2}\s?\/?\s?\d{2}$/' // Format des numéros locaux avec espaces et slashes optionnels
             ],
-            'email' => 'nullable|string|email:rfc,dns|max:255',
+            'email' => 'nullable|string|email|max:255',
             'site' => 'nullable|string|url',
             'facebook' => 'nullable|string|url',
             'instagram' => 'nullable|string|url',

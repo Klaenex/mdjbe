@@ -21,9 +21,6 @@ return new class extends Migration
             $table->unsignedBigInteger('mdj_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
-
-            // Ajout de la contrainte de clé étrangère
-            $table->foreign('mdj_id')->references('id')->on('mdjs')->onDelete('set null');
         });
     }
 

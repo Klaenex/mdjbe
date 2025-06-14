@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,9 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
         $this->call(userSeeder::class);
         $this->call(dispositifParticulierSeeder::class);
+        $this->call(mdjSeeder::class);
         $this->call(projetPorteurSeeder::class);
     }
 }

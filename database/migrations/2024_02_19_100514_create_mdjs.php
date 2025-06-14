@@ -31,14 +31,14 @@ return new class extends Migration
             $table->string('region')->nullable();
             $table->boolean('active')->default(0);
             $table->timestamps();
-            $table->unsignedBigInteger('id_user')->nullable();
 
+            // Clé étrangère pour id_user (colonne + FK en une seule fois)
+            $table->foreignId('id_user')->nullable()->constrained('users')->nullOnDelete();
 
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('dispositif_particulier')->references('id')->on('dispositif_particulier');
+            // Clé étrangère pour dispositif_particulier
+            $table->foreign('dispositif_particulier')->references('id')->on('dispositif_particulier')->nullOnDelete();
         });
     }
-
 
     /**
      * Reverse the migrations.

@@ -60,7 +60,7 @@ class MdjController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Erreur lors de la mise à jour de la Mdj: {$e->getMessage()}", ['exception' => $e]);
-            return back()->withErrors($request->errors())->withInput();
+            //return back()->withErrors($request->errors())->withInput();
         }
     }
 

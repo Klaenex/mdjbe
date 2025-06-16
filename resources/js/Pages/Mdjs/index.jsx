@@ -61,7 +61,7 @@ export default function Dashboard({ auth, mdjs, errors }) {
                         >
                             {mdj.name}
                             <Link
-                                href={route("mdjs.edit", { id: mdj.id })}
+                                href={route("admin.mdjs.edit", { id: mdj.id })}
                                 className="px-3 py-1 border rounded"
                             >
                                 Modifier

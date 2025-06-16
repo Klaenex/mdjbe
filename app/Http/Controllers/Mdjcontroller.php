@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Mdjs;
+use App\Http\Requests\UpdateMdjRequest;
 use App\Models\DispositifParticulier;
 use App\Models\Image;
+use App\Models\Mdjs;
 use App\Models\ProjetPorteur;
-use App\Http\Requests\UpdateMdjRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;  // Assurez-vous que Log est importé
+use Inertia\Inertia;  // Assurez-vous que Log est importé
 
 class MdjController extends Controller
 {
@@ -29,11 +28,12 @@ class MdjController extends Controller
         $images = Image::where('mdj_id', $id)->get();
         $dp = DispositifParticulier::all();
         $projetPorteur = ProjetPorteur::where('mdj_id', $id)->orderBy('id', 'desc')->get();
+
         return Inertia::render('Mdjs/Edit', [
             'editMdj' => $mdj,
             'dp' => $dp,
             'img' => $images,
-            'projetPorteur' => $projetPorteur
+            'projetPorteur' => $projetPorteur,
         ]);
     }
 
@@ -55,15 +55,16 @@ class MdjController extends Controller
             }
 
             DB::commit();
+
             return redirect()->route('mdjs.edit', $mdj->id)
                 ->with('success', 'La maison de jeunes a été mise à jour avec succès.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Erreur lors de la mise à jour de la Mdj: {$e->getMessage()}", ['exception' => $e]);
+
             return back()->withErrors($request->errors())->withInput();
         }
     }
-
 
     protected function handleImageUpload($request, $mdj)
     {
@@ -95,14 +96,14 @@ class MdjController extends Controller
                 'name' => $file->getClientOriginalName(),
                 'ext' => $file->extension(),
                 'desc' => $type === 'logo' ? 'Logo de la maison de jeunes' : 'Image de la maison de jeunes',
-                'type' => $type
+                'type' => $type,
             ]);
         } else {
             Log::error("Fichier invalide pour le champ {$type}.");
+
             return back()->withErrors(['upload' => "Le fichier pour le champ {$type} n'est pas valide."]);
         }
     }
-
 
     protected function handleProjects($projects, $mdj)
     {
@@ -110,7 +111,7 @@ class MdjController extends Controller
             try {
                 ProjetPorteur::create([
                     'mdj_id' => $mdj->id,  // Assurez-vous que cette valeur est bien passée
-                    'name' => $project['name']
+                    'name' => $project['name'],
                 ]);
             } catch (\Exception $e) {
                 Log::error("Erreur lors de la création d'un projet porteur: {$e->getMessage()}");
@@ -124,9 +125,11 @@ class MdjController extends Controller
         try {
             $project = ProjetPorteur::findOrFail($id);
             $project->delete();
+
             return redirect()->back()->with('success', 'Le projet a bien été supprimé');
         } catch (\Exception $e) {
             Log::error("Erreur lors de la suppression du projet porteur: {$e->getMessage()}", ['exception' => $e]);
+
             return redirect()->back()->with('error', 'Erreur lors de la suppression du projet');
         }
     }

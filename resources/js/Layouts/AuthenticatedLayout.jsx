@@ -23,23 +23,23 @@ export default function Authenticated({ user, header, children }) {
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
-                                    href={route("dashboard")}
-                                    active={route().current("dashboard")}
+                                    href={route("admin.dashboard")}
+                                    active={route().current("admin.dashboard")}
                                 >
                                     Dashboard
                                 </NavLink>
                                 {user.is_admin === 1 && (
                                     <>
                                         <NavLink
-                                            href={route("users.index")}
+                                            href={route("admin.users.index")}
                                             active={route().current(
-                                                "users.index"
+                                                "admin.users.index"
                                             )}
                                         >
                                             Utilisateurs
                                         </NavLink>
                                         <NavLink
-                                            href={route("mdjs.index")}
+                                            href={route("admin.mdjs.index")}
                                             active={route().current(
                                                 "mdjs.index"
                                             )}
@@ -80,12 +80,12 @@ export default function Authenticated({ user, header, children }) {
 
                                     <Dropdown.Content>
                                         <Dropdown.Link
-                                            href={route("profile.edit")}
+                                            href={route("admin.profile.edit")}
                                         >
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route("logout")}
+                                            href={route("admin.logout")}
                                             method="post"
                                             as="button"
                                         >
@@ -147,15 +147,15 @@ export default function Authenticated({ user, header, children }) {
                 >
                     <div className="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            href={route("dashboard")}
-                            active={route().current("dashboard")}
+                            href={route("admin.dashboard")}
+                            active={route().current("admin.dashboard")}
                         >
                             Dashboard
                         </ResponsiveNavLink>
                         {user.is_admin === 1 && (
                             <ResponsiveNavLink
-                                href={route("users.index")}
-                                active={route().current("users.index")}
+                                href={route("admin.users.index")}
+                                active={route().current("admin.users.index")}
                             >
                                 Utilisateurs
                             </ResponsiveNavLink>
@@ -173,12 +173,12 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route("profile.edit")}>
+                            <ResponsiveNavLink href={route("admin.profile.edit")}>
                                 Profile
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 method="post"
-                                href={route("logout")}
+                                href={route("admin.logout")}
                                 as="button"
                             >
                                 Log Out

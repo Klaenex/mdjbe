@@ -73,7 +73,7 @@ export default function UserPage({ auth, users, errors }) {
 
                     <Link
                         className="p-2 border rounded block bg-green-400"
-                        href={route("users.create")}
+                        href={route("admin.users.create")}
                     >
                         Ajouter un utilisateur
                     </Link>
@@ -87,7 +87,7 @@ export default function UserPage({ auth, users, errors }) {
                         >
                             {user.name} - {user.email}{" "}
                             <Link
-                                href={route("users.edit", { id: user.id })}
+                                href={route("admin.users.edit", { id: user.id })}
                                 className="px-3 py-1 border rounded"
                             >
                                 Modifier

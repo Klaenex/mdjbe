@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Mdjs;
 use Illuminate\Database\Seeder;
 
 class mdjSeeder extends Seeder
@@ -12,6 +12,6 @@ class mdjSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Mdjs::factory()->count(20)->create();
     }
 }

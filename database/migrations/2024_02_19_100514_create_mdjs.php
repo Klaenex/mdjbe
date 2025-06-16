@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('mdjs', function (Blueprint $table) {
@@ -32,19 +29,26 @@ return new class extends Migration
             $table->boolean('active')->default(0);
             $table->timestamps();
             $table->unsignedBigInteger('id_user')->nullable();
+        });
 
+        Schema::table('mdjs', function (Blueprint $table) {
+            if (Schema::hasTable('users')) {
+                $table->foreign('id_user')->references('id')->on('users')->onDelete('set null');
+            }
 
-            $table->foreign('id_user')->references('id')->on('users');
-            $table->foreign('dispositif_particulier')->references('id')->on('dispositif_particulier');
+            if (Schema::hasTable('dispositif_particulier')) {
+                $table->foreign('dispositif_particulier')->references('id')->on('dispositif_particulier')->onDelete('set null');
+            }
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
+        Schema::table('mdjs', function (Blueprint $table) {
+            $table->dropForeign(['id_user']);
+            $table->dropForeign(['dispositif_particulier']);
+        });
+
         Schema::dropIfExists('mdjs');
     }
 };
